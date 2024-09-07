@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: footballStatistics
+
+
+#DB
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/football_statistics
+    username:
+    password:
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+      open-in-view: true
+
+    properties:
+      hibernate:
+        format-sql: true
+
+#Loggers
+  logging:
+    level:
+      org:
+      hibernate:
+      SQL: DEBUG
+      type.descriptor.sql.BasicBinder: TRACE
+      orm.jdbc.bind: TRACE
+
+
+#JWT
+#  jwt:
+#    security:
+#      secret-key: 2104395e07cf2208af79a5f21b9769385429610dda4d076653efb0a0462b4a7e
+#      duration-ms: 3600000  #one hour
