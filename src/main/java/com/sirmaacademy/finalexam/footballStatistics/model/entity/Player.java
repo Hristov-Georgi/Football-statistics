@@ -18,10 +18,13 @@ public class Player {
     private FieldPosition fieldPosition;
 
     @Column(nullable = false)
-    private String fullName; //TODO: Divide names - first and last name ??;
+    private String fullName;
 
     @ManyToOne
     private Team team;
+
+    @Transient
+    private Long teamId;
 
     public Player() {
     }
@@ -33,12 +36,12 @@ public class Player {
         this.team = team;
     }
 
-    public Player(long id, int teamNumber, FieldPosition fieldPosition, String fullName, Team team) {
+    public Player(Long id, int teamNumber, FieldPosition fieldPosition, String fullName, Long teamId) {
         this.id = id;
         this.teamNumber = teamNumber;
         this.fieldPosition = fieldPosition;
         this.fullName = fullName;
-        this.team = team;
+        this.teamId = teamId;
     }
 
     public long getId() {
@@ -80,4 +83,13 @@ public class Player {
     public void setTeam(Team team) {
         this.team = team;
     }
+
+    public Long getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(Long teamId) {
+        this.teamId = teamId;
+    }
+
 }

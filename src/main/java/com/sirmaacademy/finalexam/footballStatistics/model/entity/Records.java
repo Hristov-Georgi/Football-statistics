@@ -21,7 +21,7 @@ public class Records {
     @Size(max = 300)
     private Integer fromMinutes;
 
-    @Column
+    @Column(nullable = false) // TODO: if input data is NULL -> set to 90 min
     @Size(max = 300)
     private Integer toMinutes;
 
@@ -82,4 +82,5 @@ public class Records {
     public void setToMinutes(@Size(max = 300) Integer toMinutes) {
         this.toMinutes = toMinutes;
     }
+
 }

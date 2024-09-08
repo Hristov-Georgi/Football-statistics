@@ -14,34 +14,39 @@ public class Match {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany(mappedBy = "matches", fetch = FetchType.EAGER)
-    private List<Team> teams;
-
     @DateTimeFormat
     private LocalDate localDate; //TODO: universal format
 
-    @Column(nullable = false)
-    private int ATeamScore;
+    @OneToMany
+    private List<Score> scores;
 
-    @Column(nullable = false)
-    private int BTeamScore;
+    @Transient
+    private Long ATeamId; //do i need it ?
+
+    @Transient
+    private Long BTeamId;
+
+    @Transient
+    private String aTeamScore;
+
+    @Transient
+    private String bTeamScore;
 
     public Match() {
     }
 
-    public Match(Team ATeam, Team BTeam, LocalDate localDate, int ATeamScore, int BTeamScore) {
-        this.teams = List.of(ATeam, BTeam);
+    public Match(LocalDate localDate, List<Score> scores) {
         this.localDate = localDate;
-        this.ATeamScore = ATeamScore;
-        this.BTeamScore = BTeamScore;
+        this.scores = scores;
     }
 
-    public Match(Long id, Team ATeam, Team BTeam, LocalDate localDate, int ATeamScore, int BTeamScore) {
+    public Match(Long id, Long ATeamId, Long BTeamId, LocalDate localDate, String ATeamScore, String BTeamScore) {
         this.id = id;
-        this.teams = List.of(ATeam, BTeam);
+        this.ATeamId = ATeamId;
+        this.BTeamId = BTeamId;
         this.localDate = localDate;
-        this.ATeamScore = ATeamScore;
-        this.BTeamScore = BTeamScore;
+        this.aTeamScore = ATeamScore;
+        this.bTeamScore = BTeamScore;
     }
 
     public Long getId() {
@@ -52,14 +57,6 @@ public class Match {
         this.id = id;
     }
 
-    public List<Team> getTeams() {
-        return teams;
-    }
-
-    public void setTeams(List<Team> teams) {
-        this.teams = teams;
-    }
-
     public LocalDate getLocalDate() {
         return localDate;
     }
@@ -68,20 +65,44 @@ public class Match {
         this.localDate = localDate;
     }
 
-    public int getATeamScore() {
-        return ATeamScore;
+    public Long getATeamId() {
+        return ATeamId;
     }
 
-    public void setATeamScore(int ATeamScore) {
-        this.ATeamScore = ATeamScore;
+    public void setATeamId(Long ATeamId) {
+        this.ATeamId = ATeamId;
     }
 
-    public int getBTeamScore() {
-        return BTeamScore;
+    public Long getBTeamId() {
+        return BTeamId;
     }
 
-    public void setBTeamScore(int BTeamScore) {
-        this.BTeamScore = BTeamScore;
+    public void setBTeamId(Long BTeamId) {
+        this.BTeamId = BTeamId;
+    }
+
+    public List<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(List<Score> scores) {
+        this.scores = scores;
+    }
+
+    public String getaTeamScore() {
+        return aTeamScore;
+    }
+
+    public void setaTeamScore(String aTeamScore) {
+        this.aTeamScore = aTeamScore;
+    }
+
+    public String getbTeamScore() {
+        return bTeamScore;
+    }
+
+    public void setbTeamScore(String bTeamScore) {
+        this.bTeamScore = bTeamScore;
     }
 
 }
