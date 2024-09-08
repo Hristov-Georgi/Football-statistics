@@ -17,20 +17,8 @@ public class Match {
     @DateTimeFormat
     private LocalDate localDate; //TODO: universal format
 
-    @OneToMany
+    @OneToMany(targetEntity = Score.class, mappedBy = "match")
     private List<Score> scores;
-
-    @Transient
-    private Long ATeamId; //do i need it ?
-
-    @Transient
-    private Long BTeamId;
-
-    @Transient
-    private String aTeamScore;
-
-    @Transient
-    private String bTeamScore;
 
     public Match() {
     }
@@ -40,13 +28,10 @@ public class Match {
         this.scores = scores;
     }
 
-    public Match(Long id, Long ATeamId, Long BTeamId, LocalDate localDate, String ATeamScore, String BTeamScore) {
+    public Match(Long id, LocalDate localDate, List<Score> scores) {
         this.id = id;
-        this.ATeamId = ATeamId;
-        this.BTeamId = BTeamId;
         this.localDate = localDate;
-        this.aTeamScore = ATeamScore;
-        this.bTeamScore = BTeamScore;
+        this.scores = scores;
     }
 
     public Long getId() {
@@ -65,21 +50,21 @@ public class Match {
         this.localDate = localDate;
     }
 
-    public Long getATeamId() {
-        return ATeamId;
-    }
-
-    public void setATeamId(Long ATeamId) {
-        this.ATeamId = ATeamId;
-    }
-
-    public Long getBTeamId() {
-        return BTeamId;
-    }
-
-    public void setBTeamId(Long BTeamId) {
-        this.BTeamId = BTeamId;
-    }
+//    public Long getATeamId() {
+//        return ATeamId;
+//    }
+//
+//    public void setATeamId(Long ATeamId) {
+//        this.ATeamId = ATeamId;
+//    }
+//
+//    public Long getBTeamId() {
+//        return BTeamId;
+//    }
+//
+//    public void setBTeamId(Long BTeamId) {
+//        this.BTeamId = BTeamId;
+//    }
 
     public List<Score> getScores() {
         return scores;
@@ -89,21 +74,21 @@ public class Match {
         this.scores = scores;
     }
 
-    public String getaTeamScore() {
-        return aTeamScore;
-    }
-
-    public void setaTeamScore(String aTeamScore) {
-        this.aTeamScore = aTeamScore;
-    }
-
-    public String getbTeamScore() {
-        return bTeamScore;
-    }
-
-    public void setbTeamScore(String bTeamScore) {
-        this.bTeamScore = bTeamScore;
-    }
+//    public String getaTeamScore() {
+//        return aTeamScore;
+//    }
+//
+//    public void setaTeamScore(String aTeamScore) {
+//        this.aTeamScore = aTeamScore;
+//    }
+//
+//    public String getbTeamScore() {
+//        return bTeamScore;
+//    }
+//
+//    public void setbTeamScore(String bTeamScore) {
+//        this.bTeamScore = bTeamScore;
+//    }
 
 }
 

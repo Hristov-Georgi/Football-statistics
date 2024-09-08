@@ -23,9 +23,6 @@ public class Team {
     @Enumerated(EnumType.STRING)
     private FootballGroup footballGroup;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Match> matches;
-
     public Team() {
     }
 
@@ -75,11 +72,4 @@ public class Team {
         this.footballGroup = footballGroup;
     }
 
-    public List<Match> getMatches() {
-        return matches;
-    }
-
-    public void setMatches(List<Match> matches) {
-        this.matches = matches;
-    }
 }

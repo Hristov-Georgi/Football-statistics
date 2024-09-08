@@ -16,13 +16,20 @@ public class Score {
     @Column(nullable = false, updatable = false)
     private String scoredGoals;
 
+    @ManyToOne
+    private Match match;
+
+    @Transient
+    private Long matchId;
+
     public Score() {
     }
 
-    public Score(Long id, Team team, String scoredGoals) {
+    public Score(Long id, Team team, String scoredGoals, Long matchId) {
         this.id = id;
         this.team = team;
         this.scoredGoals = scoredGoals;
+        this.matchId = matchId;
     }
 
     public Score(Team team, String scoredGoals) {
@@ -54,4 +61,19 @@ public class Score {
         this.scoredGoals = scoredGoals;
     }
 
+    public Match getMatch() {
+        return match;
+    }
+
+    public void setMatch(Match match) {
+        this.match = match;
+    }
+
+    public Long getMatchId() {
+        return matchId;
+    }
+
+    public void setMatchId(Long matchId) {
+        this.matchId = matchId;
+    }
 }
