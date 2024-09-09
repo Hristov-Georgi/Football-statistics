@@ -4,11 +4,9 @@ import com.sirmaacademy.finalexam.footballStatistics.model.dto.MatchCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.PlayerCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.RecordCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.TeamCsvDto;
-import com.sirmaacademy.finalexam.footballStatistics.model.entity.Match;
-import com.sirmaacademy.finalexam.footballStatistics.model.entity.Player;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -16,8 +14,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
+@Service
 public class ReadCSV {
     private static final String TEAMS_CSV_FILE = "src/main/resources/input_data_csv/teams.csv";
     private static final String PLAYERS_CSV_FILE = "src/main/resources/input_data_csv/players.csv";
