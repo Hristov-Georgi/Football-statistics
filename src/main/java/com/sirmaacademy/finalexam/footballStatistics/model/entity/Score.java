@@ -19,22 +19,13 @@ public class Score {
     @ManyToOne
     private Match match;
 
-    @Transient
-    private Long matchId;
-
     public Score() {
     }
 
-    public Score(Long id, Team team, String scoredGoals, Long matchId) {
-        this.id = id;
+    public Score(Team team, String scoredGoals, Match match) {
         this.team = team;
         this.scoredGoals = scoredGoals;
-        this.matchId = matchId;
-    }
-
-    public Score(Team team, String scoredGoals) {
-        this.team = team;
-        this.scoredGoals = scoredGoals;
+        this.match = match;
     }
 
     public Long getId() {
@@ -69,11 +60,4 @@ public class Score {
         this.match = match;
     }
 
-    public Long getMatchId() {
-        return matchId;
-    }
-
-    public void setMatchId(Long matchId) {
-        this.matchId = matchId;
-    }
 }

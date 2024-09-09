@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -18,7 +19,7 @@ public class Match {
     private LocalDate localDate; //TODO: universal format
 
     @OneToMany(targetEntity = Score.class, mappedBy = "match")
-    private List<Score> scores;
+    private List<Score> scores = new ArrayList<>();
 
     public Match() {
     }
@@ -28,10 +29,9 @@ public class Match {
         this.scores = scores;
     }
 
-    public Match(Long id, LocalDate localDate, List<Score> scores) {
+    public Match(Long id, LocalDate localDate) {
         this.id = id;
         this.localDate = localDate;
-        this.scores = scores;
     }
 
     public Long getId() {
@@ -50,22 +50,6 @@ public class Match {
         this.localDate = localDate;
     }
 
-//    public Long getATeamId() {
-//        return ATeamId;
-//    }
-//
-//    public void setATeamId(Long ATeamId) {
-//        this.ATeamId = ATeamId;
-//    }
-//
-//    public Long getBTeamId() {
-//        return BTeamId;
-//    }
-//
-//    public void setBTeamId(Long BTeamId) {
-//        this.BTeamId = BTeamId;
-//    }
-
     public List<Score> getScores() {
         return scores;
     }
@@ -73,22 +57,6 @@ public class Match {
     public void setScores(List<Score> scores) {
         this.scores = scores;
     }
-
-//    public String getaTeamScore() {
-//        return aTeamScore;
-//    }
-//
-//    public void setaTeamScore(String aTeamScore) {
-//        this.aTeamScore = aTeamScore;
-//    }
-//
-//    public String getbTeamScore() {
-//        return bTeamScore;
-//    }
-//
-//    public void setbTeamScore(String bTeamScore) {
-//        this.bTeamScore = bTeamScore;
-//    }
 
 }
 
