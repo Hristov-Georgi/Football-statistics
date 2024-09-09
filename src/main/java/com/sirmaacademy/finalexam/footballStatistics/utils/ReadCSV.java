@@ -31,7 +31,7 @@ public class ReadCSV {
     }
 
     public List<MatchCsvDto> extractMatchesData() {
-        List<Match> matches = new ArrayList<>();
+        List<MatchCsvDto> matches = new ArrayList<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(MATCHES_CSV_FILE))) {
             bufferedReader.readLine();
@@ -40,27 +40,34 @@ public class ReadCSV {
             while (line != null) {
                 String[] data = line.split(",");
 
-                Long id = Long.parseLong(data[0].trim());
-                Long aTeamId = Long.parseLong(data[1].trim());
-                Long bTeamId = Long.parseLong(data[2].trim());
-                String dateString = data[3].trim();
-                String scoreString = data[4].trim();
+                try {
+                    Long id = Long.parseLong(data[0].trim());
+                    Long aTeamId = Long.parseLong(data[1].trim());
+                    Long bTeamId = Long.parseLong(data[2].trim());
+                    String dateString = data[3].trim(); //TODO: regex to match all date formats
+                    String scoreString = data[4].trim();
 
-                //TODO: implement class MatchesFromCSV
+                    MatchCsvDto matchCsvDto = new MatchCsvDto(id, aTeamId, bTeamId, dateString, scoreString);
+                    matches.add(matchCsvDto);
+
+                } catch (IllegalArgumentException e) {
+                    logger.warn("Invalid data has occurred. Check matches.csv file. Warn: {}", e.getMessage());
+                } catch (Exception e) {
+                    logger.warn("Warning in matches.csv data: {}", e.getMessage());
+                }
                 line = bufferedReader.readLine();
             }
 
         } catch (FileNotFoundException e) {
-            logger.warn("Warning in match.csv file: {}", e.getMessage());
+            logger.warn("Matches.csv file warning: {}", e.getMessage());
         } catch (IOException e) {
-            logger.error("Error in match.csv file: {}", e.getMessage());
+            logger.error("Matches.csv file error: {}", e.getMessage());
         }
-        return null;
-
+        return matches;
     }
 
     public List<PlayerCsvDto> extractPlayersData() {
-        List<Player> players = new ArrayList<>(); // TODO: handle database exception if ids are equal
+        List<PlayerCsvDto> players = new ArrayList<>();
 
         try (BufferedReader bufferedReader = new BufferedReader(new FileReader(PLAYERS_CSV_FILE))) {
             bufferedReader.readLine();
@@ -68,25 +75,31 @@ public class ReadCSV {
 
             while (line != null) {
                 String[] data = line.split(",");
-//TODO: try-catch for parsing exception and log the error.
-                long id = Long.parseLong(data[0].trim());
-                int teamNumber = Integer.parseInt(data[1].trim());
-                String position = data[2].trim();
-                String fullName = data[3].trim();
-                Long teamId = Long.parseLong(data[4].trim());
 
-                //TODO
+                try {
+                    long id = Long.parseLong(data[0].trim());
+                    int teamNumber = Integer.parseInt(data[1].trim());
+                    String position = data[2].trim();
+                    String fullName = data[3].trim();
+                    Long teamId = Long.parseLong(data[4].trim());
+
+                    PlayerCsvDto playerCsvDto = new PlayerCsvDto(id, teamNumber, position, fullName, teamId);
+                    players.add(playerCsvDto);
+
+                } catch (IllegalArgumentException e) {
+                    logger.warn("Invalid data  occurred. Check players.csv file. Warn: {}", e.getMessage());
+                } catch (Exception e) {
+                    logger.warn("Warning in players.csv data: {}", e.getMessage());
+                }
                 line = bufferedReader.readLine();
             }
 
         } catch (FileNotFoundException e) {
-            logger.warn("MY CUSTOM warning: {}", e.getMessage());
-        } catch (NoSuchElementException e) {
-            logger.info("info: {}", e.getMessage());
+            logger.warn("Players.csv file warning: {}", e.getMessage());
         } catch (IOException e) {
-            logger.error("Error in players.csv file: {}", e.getMessage());
+            logger.error("Players.csv file error: {}", e.getMessage());
         }
-        return null;
+        return players;
     }
 
     public List<TeamCsvDto> extractTeamsData() {
@@ -108,8 +121,10 @@ public class ReadCSV {
                     TeamCsvDto teamCsvDto = new TeamCsvDto(id, teamName, managerFullName, footballGroup);
                     teams.add(teamCsvDto);
 
-                } catch (NumberFormatException e) {
+                } catch (IllegalArgumentException e) {
                     logger.warn("Invalid data  occurred. Check teams.csv file. Warn: {}", e.getMessage());
+                } catch (Exception e) {
+                    logger.warn("Warning in teams.csv data: {}", e.getMessage());
                 }
                 line = bufferedReader.readLine();
             }
@@ -123,6 +138,5 @@ public class ReadCSV {
         }
         return teams;
     }
-
 
 }
