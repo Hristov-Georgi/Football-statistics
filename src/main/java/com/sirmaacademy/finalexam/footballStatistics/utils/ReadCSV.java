@@ -25,7 +25,39 @@ public class ReadCSV {
     private static final Logger logger = LoggerFactory.getLogger(ReadCSV.class);
 
     public List<RecordCsvDto> extractRecordsData() {
-        return null;
+        List<RecordCsvDto> records = new ArrayList<>();
+
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(MATCHES_CSV_FILE))) {
+            bufferedReader.readLine();
+            String line = bufferedReader.readLine();
+
+            while (line != null) {
+                String[] data = line.split(",");
+
+                try {
+                    Long id = Long.parseLong(data[0].trim());
+                    Long playerId = Long.parseLong(data[1].trim());
+                    Long matchId = Long.parseLong(data[2].trim());
+                    int fromMinutes = Integer.parseInt(data[3].trim());
+                    int toMinutes = Integer.parseInt(data[4].trim());
+
+                    RecordCsvDto recordCsvDto = new RecordCsvDto(id, playerId, matchId, fromMinutes, toMinutes);
+                    records.add(recordCsvDto);
+
+                } catch (IllegalArgumentException e) {
+                    logger.warn("Invalid data has occurred. Check records.csv file. Warn: {}", e.getMessage());
+                } catch (Exception e) {
+                    logger.warn("Warning in records.csv data: {}", e.getMessage());
+                }
+                line = bufferedReader.readLine();
+            }
+
+        } catch (FileNotFoundException e) {
+            logger.warn("Records.csv file warning: {}", e.getMessage());
+        } catch (IOException e) {
+            logger.error("Records.csv file error: {}", e.getMessage());
+        }
+        return records;
     }
 
     public List<MatchCsvDto> extractMatchesData() {
