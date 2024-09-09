@@ -3,11 +3,9 @@ package com.sirmaacademy.finalexam.footballStatistics.service;
 import com.sirmaacademy.finalexam.footballStatistics.exceptions.*;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.MatchCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.PlayerCsvDto;
+import com.sirmaacademy.finalexam.footballStatistics.model.dto.RecordCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.TeamCsvDto;
-import com.sirmaacademy.finalexam.footballStatistics.model.entity.Match;
-import com.sirmaacademy.finalexam.footballStatistics.model.entity.Player;
-import com.sirmaacademy.finalexam.footballStatistics.model.entity.Score;
-import com.sirmaacademy.finalexam.footballStatistics.model.entity.Team;
+import com.sirmaacademy.finalexam.footballStatistics.model.entity.*;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FieldPosition;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FootballGroup;
 import com.sirmaacademy.finalexam.footballStatistics.repository.CsvToDatabaseRepository;
@@ -32,13 +30,49 @@ public class CsvToDatabaseService {
     private final CsvToDatabaseRepository csvToDatabaseRepository;
     private final TeamService teamService;
     private final ScoreService scoreService;
+    private final PlayerService playerService;
+    private final MatchService matchService;
 
     @Autowired
-    public CsvToDatabaseService(ReadCSV readCSV, CsvToDatabaseRepository csvToDatabaseRepository, TeamService teamService, ScoreService scoreService) {
+    public CsvToDatabaseService(ReadCSV readCSV, CsvToDatabaseRepository csvToDatabaseRepository, TeamService teamService, ScoreService scoreService, PlayerService playerService, MatchService matchService) {
         this.readCSV = readCSV;
         this.csvToDatabaseRepository = csvToDatabaseRepository;
         this.teamService = teamService;
         this.scoreService = scoreService;
+        this.playerService = playerService;
+        this.matchService = matchService;
+    }
+
+    public void persistRecordsToDatabase() {
+        List<Records> recordsList = new ArrayList<>();
+
+        for (RecordCsvDto r : this.readCSV.extractRecordsData()) {
+
+            try {
+                Long id = ValidateCsvDto.validateId(r.getId());
+                Long playerId = ValidateCsvDto.validateId(r.getPlayerId());
+                Long matchId = ValidateCsvDto.validateId(r.getMatchId());
+
+                if (!this.playerService.isPlayerExist(playerId)) {
+                    throw new InvalidIdException("Player with id: '" + playerId
+                            + "' does not exist.");
+                } else if (!this.matchService.isMatchExist(matchId)) {
+                    throw new InvalidIdException("Match with id: '" + matchId
+                            + "' does not exist.");
+                }
+                Integer fromMinutes = ValidateCsvDto.validateMinutes(r.getFromMinutes());
+                Integer toMinutes = ValidateCsvDto.validateMinutes(r.getToMinutes());
+
+                Records record = new Records(id, playerId, matchId, fromMinutes, toMinutes);
+                recordsList.add(record);
+
+            } catch (InvalidIdException
+                    | InvalidMatchDurationException e) {
+                logger.warn("Warning in records.csv data: {}", e.getMessage());
+            }
+
+        }
+        this.csvToDatabaseRepository.saveRecords(recordsList);
     }
 
     /**
@@ -53,15 +87,14 @@ public class CsvToDatabaseService {
         for (MatchCsvDto m : this.readCSV.extractMatchesData()) {
 
             try {
-
                 Long id = ValidateCsvDto.validateId(m.getId());
                 Long aTeamId = ValidateCsvDto.validateId(m.getaTeamId());
                 Long bTeamId = ValidateCsvDto.validateId(m.getbTeamId());
 
                 if (!this.teamService.isTeamExist(aTeamId)) {
-                    throw new InvalidTeamException("Team with id: '" + aTeamId + "' does not exist.");
+                    throw new InvalidIdException("Team with id: '" + aTeamId + "' does not exist.");
                 } else if (!this.teamService.isTeamExist(bTeamId)) {
-                    throw new InvalidTeamException("Team with id: '" + bTeamId + "' does not exist.");
+                    throw new InvalidIdException("Team with id: '" + bTeamId + "' does not exist.");
                 }
                 LocalDate localDate = DateFormatter.formatDate(m.getDate());
                 String aTeamScore = ValidateCsvDto.validateGoalsInput(m.getScore(), "aTeamScore");
@@ -75,8 +108,7 @@ public class CsvToDatabaseService {
                 scores.add(aTeam);
                 scores.add(bTeam);
 
-            } catch(InvalidTeamException
-                    | InvalidIdException
+            } catch(InvalidIdException
                     | DateTimeParseException
                     | InvalidMatchScoreException e) {
                 logger.warn("Warning in matches.csv data: {}", e.getMessage());
@@ -106,15 +138,14 @@ public class CsvToDatabaseService {
                     Player player = new Player(id, teamNumber, fieldPosition, fullName, teamId);
                     players.add(player);
                 } else {
-                    throw new InvalidTeamException("Team with id: '" + teamId + "' does not exist.");
+                    throw new InvalidIdException("Team with id: '" + teamId + "' does not exist.");
                 }
 
             } catch (InvalidIdException
                      | InvalidSymbolException
                      | InvalidLengthException
                      | InvalidFootballGroupException
-                     | InvalidPlayerTeamNumberException
-                     | InvalidTeamException e) {
+                     | InvalidPlayerTeamNumberException e) {
                 logger.warn("Players data Warn: {}", e.getMessage());
             }
 

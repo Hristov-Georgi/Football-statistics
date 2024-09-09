@@ -5,10 +5,10 @@ public class RecordCsvDto {
     private Long id;
     private Long playerId;
     private Long matchId;
-    private int fromMinutes;
-    private int toMinutes;
+    private Integer fromMinutes;
+    private Integer toMinutes;
 
-    public RecordCsvDto(Long id, Long playerId, Long matchId, int fromMinutes, int toMinutes) {
+    public RecordCsvDto(Long id, Long playerId, Long matchId, Integer fromMinutes, Integer toMinutes) {
         this.id = id;
         this.playerId = playerId;
         this.matchId = matchId;
@@ -40,19 +40,20 @@ public class RecordCsvDto {
         this.matchId = matchId;
     }
 
-    public int getFromMinutes() {
+    public Integer getFromMinutes() {
         return fromMinutes;
     }
 
-    public void setFromMinutes(int fromMinutes) {
+    public void setFromMinutes(Integer fromMinutes) {
         this.fromMinutes = fromMinutes;
     }
 
-    public int getToMinutes() {
+    public Integer getToMinutes() {
         return toMinutes;
     }
 
-    public void setToMinutes(int toMinutes) {
+    public void setToMinutes(Integer toMinutes) {
         this.toMinutes = toMinutes;
     }
+
 }

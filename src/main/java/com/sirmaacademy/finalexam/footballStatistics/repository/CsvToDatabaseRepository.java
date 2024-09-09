@@ -2,6 +2,7 @@ package com.sirmaacademy.finalexam.footballStatistics.repository;
 
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.Match;
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.Player;
+import com.sirmaacademy.finalexam.footballStatistics.model.entity.Records;
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.Team;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
@@ -15,6 +16,22 @@ public class CsvToDatabaseRepository {
 
     @PersistenceContext
     private EntityManager entityManager;
+
+    @Transactional
+    public void saveRecords(List<Records> records) {
+
+        for (Records r : records) {
+            entityManager.createNativeQuery("INSERT INTO records (id, from_minutes, to_minutes, match_id, player_id)" +
+                    " VALUES (?, ?, ?, ?, ?)")
+                    .setParameter(1, r.getId())
+                    .setParameter(2, r.getFromMinutes())
+                    .setParameter(3, r.getToMinutes())
+                    .setParameter(4, r.getMatchId())
+                    .setParameter(5, r.getPlayerId())
+                    .executeUpdate();
+        }
+
+    }
 
     @Transactional
     public void saveMatches(List<Match> matches) {

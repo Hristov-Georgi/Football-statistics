@@ -9,6 +9,15 @@ import java.util.regex.Pattern;
 
 public abstract class ValidateCsvDto {
 
+    public static int validateMinutes(Integer minutes) {
+
+        if (minutes < 0 || 190 < minutes) {
+            throw new InvalidMatchDurationException("Invalid data: '" + minutes
+            + "' minutes. Match duration is higher than 0 minutes and usually no more than 120 minutes.");
+        }
+        return minutes;
+    }
+
     public static String validateGoalsInput(String goals, String requiredTeamScore) {
 
         String regex = "^(?<aGoals>[0-9]){1,3}\\s{0,3}(?<aPenalty>\\([0-9]{1,3}\\))?\\s{0,3}(-)\\s{0,3}(?<bGoals>[0-9]){1,3}\\s{0,3}(?<bPenalty>\\([0-9]{1,3}\\))?$";

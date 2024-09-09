@@ -4,6 +4,7 @@ import com.sirmaacademy.finalexam.footballStatistics.model.dto.MatchCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.PlayerCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.RecordCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.TeamCsvDto;
+import com.sirmaacademy.finalexam.footballStatistics.validation.ValidateCsvDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,12 +23,14 @@ public class ReadCSV {
     private static final String RECORDS_CSV_FILE = "src/main/resources/input_data_csv/records.csv";
     private static final String MATCHES_CSV_FILE = "src/main/resources/input_data_csv/matches.csv";
 
+    private static final Integer MATCH_STANDARD_DURATION_MINUTES = 90;
+
     private static final Logger logger = LoggerFactory.getLogger(ReadCSV.class);
 
     public List<RecordCsvDto> extractRecordsData() {
         List<RecordCsvDto> records = new ArrayList<>();
 
-        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(MATCHES_CSV_FILE))) {
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(RECORDS_CSV_FILE))) {
             bufferedReader.readLine();
             String line = bufferedReader.readLine();
 
@@ -38,8 +41,14 @@ public class ReadCSV {
                     Long id = Long.parseLong(data[0].trim());
                     Long playerId = Long.parseLong(data[1].trim());
                     Long matchId = Long.parseLong(data[2].trim());
-                    int fromMinutes = Integer.parseInt(data[3].trim());
-                    int toMinutes = Integer.parseInt(data[4].trim());
+                    Integer fromMinutes = Integer.parseInt(data[3].trim());
+                    Integer toMinutes;
+
+                    if (data[4].equalsIgnoreCase("NULL") || data[4].isBlank() ) {
+                        toMinutes = MATCH_STANDARD_DURATION_MINUTES;
+                    } else {
+                        toMinutes = Integer.parseInt(data[4].trim());
+                    }
 
                     RecordCsvDto recordCsvDto = new RecordCsvDto(id, playerId, matchId, fromMinutes, toMinutes);
                     records.add(recordCsvDto);

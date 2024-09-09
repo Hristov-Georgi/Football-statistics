@@ -1,7 +1,6 @@
 package com.sirmaacademy.finalexam.footballStatistics.model.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "records")
@@ -18,12 +17,16 @@ public class Records {
     private Match match;
 
     @Column(nullable = false)
-    @Size(max = 300)
     private Integer fromMinutes;
 
-    @Column(nullable = false) // TODO: if input data is NULL -> set to 90 min
-    @Size(max = 300)
+    @Column(nullable = false)
     private Integer toMinutes;
+
+    @Transient
+    private Long playerId;
+
+    @Transient
+    private Long matchId;
 
     public Records() {
     }
@@ -35,10 +38,10 @@ public class Records {
         this.toMinutes = toMinutes;
     }
 
-    public Records(long id, Player player, Match match, Integer fromMinutes, Integer toMinutes) {
+    public Records(long id, Long playerId, Long matchId, Integer fromMinutes, Integer toMinutes) {
         this.id = id;
-        this.player = player;
-        this.match = match;
+        this.playerId = playerId;
+        this.matchId = matchId;
         this.fromMinutes = fromMinutes;
         this.toMinutes = toMinutes;
     }
@@ -67,20 +70,35 @@ public class Records {
         this.match = match;
     }
 
-    public @Size(max = 300) Integer getFromMinutes() {
+    public Integer getFromMinutes() {
         return fromMinutes;
     }
 
-    public void setFromMinutes(@Size(max = 300) Integer fromMinutes) {
+    public void setFromMinutes (Integer fromMinutes) {
         this.fromMinutes = fromMinutes;
     }
 
-    public @Size(max = 300) Integer getToMinutes() {
+    public Integer getToMinutes() {
         return toMinutes;
     }
 
-    public void setToMinutes(@Size(max = 300) Integer toMinutes) {
+    public void setToMinutes(Integer toMinutes) {
         this.toMinutes = toMinutes;
     }
 
+    public Long getPlayerId() {
+        return playerId;
+    }
+
+    public void setPlayerId(Long playerId) {
+        this.playerId = playerId;
+    }
+
+    public Long getMatchId() {
+        return matchId;
+    }
+
+    public void setMatchId(Long matchId) {
+        this.matchId = matchId;
+    }
 }
