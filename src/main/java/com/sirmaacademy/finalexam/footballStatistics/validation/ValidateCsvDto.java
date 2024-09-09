@@ -4,8 +4,49 @@ import com.sirmaacademy.finalexam.footballStatistics.exceptions.*;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FieldPosition;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FootballGroup;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public abstract class ValidateCsvDto {
 
+    public static String validateGoalsInput(String goals, String requiredTeamScore) {
+
+        String regex = "^(?<aGoals>[0-9]){1,3}\\s{0,3}(?<aPenalty>\\([0-9]{1,3}\\))?\\s{0,3}(-)\\s{0,3}(?<bGoals>[0-9]){1,3}\\s{0,3}(?<bPenalty>\\([0-9]{1,3}\\))?$";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(goals);
+
+        if (matcher.matches()) {
+
+            String aPenalty = matcher.group("aPenalty");
+            String bPenalty = matcher.group("bPenalty");
+
+            if ((aPenalty == null || aPenalty.isBlank()) && (bPenalty == null || bPenalty.isBlank()) ) {
+
+                if (requiredTeamScore.equals("aTeamScore")) {
+                    return matcher.group("aGoals");
+                } else {
+                    return matcher.group("bGoals");
+                }
+
+            } else if (aPenalty != null && !aPenalty.isBlank() && bPenalty != null && !bPenalty.isBlank()) {
+
+                if (requiredTeamScore.equals("aTeamScore")) {
+                    return matcher.group("aGoals") + matcher.group("aPenalty");
+                } else {
+                    return matcher.group("bGoals") + matcher.group("bPenalty");
+                }
+
+            } else {
+                throw new InvalidMatchScoreException("Score: '" + goals
+                        + "' is in invalid format. Make corrections in matches.csv data.");
+            }
+
+        } else {
+            throw new InvalidMatchScoreException("Score: '" + goals
+                    + "' is in invalid format. Make corrections in matches.csv data.");
+        }
+
+    }
 
     public static FieldPosition validateFieldPosition(String position) {
 
@@ -50,17 +91,6 @@ public abstract class ValidateCsvDto {
         } else if (personFullName.length() > 100) {
             throw new InvalidLengthException("Name can't be more than 100 symbols long");
         }
-
-        for (char s : personFullName.toCharArray()) {
-
-            if (( s < 32)
-                    || ( 32 < s && s < 65)
-                    || (90 < s && s < 97)
-                    ||  122 < s) {
-                throw new InvalidSymbolException("Invalid symbol: '" + s + "' in person's full name.");
-            }
-
-        }
         return personFullName;
     }
 
@@ -74,19 +104,19 @@ public abstract class ValidateCsvDto {
             throw new InvalidLengthException("Name can't be more than 100 symbols long");
         }
 
-        for (char s : name.toCharArray()) {
-
-            if ( 122 < s
-                    || (90 < s && s < 97)
-                    || (57 < s && s < 65)
-                    || (s < 48 && 45 < s)
-                    || (s < 45 && 41 < s)
-                    || (s < 40 && 32 < s)
-                    || s < 32) {
-                throw new InvalidSymbolException("Invalid symbol: '" + s + "' in football team's name.");
-            }
-
-        }
+//        for (char s : name.toCharArray()) {
+//
+//            if ( 122 < s
+//                    || (90 < s && s < 97)
+//                    || (57 < s && s < 65)
+//                    || (s < 48 && 45 < s)
+//                    || (s < 45 && 41 < s)
+//                    || (s < 40 && 32 < s)
+//                    || s < 32) {
+//                throw new InvalidSymbolException("Invalid symbol: '" + s + "' in football team's name.");
+//            }
+//
+//        }
         return name;
     }
 
