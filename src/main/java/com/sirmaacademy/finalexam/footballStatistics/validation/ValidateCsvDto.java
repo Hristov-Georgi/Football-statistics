@@ -1,12 +1,33 @@
 package com.sirmaacademy.finalexam.footballStatistics.validation;
 
-import com.sirmaacademy.finalexam.footballStatistics.exceptions.InvalidFootballGroupException;
-import com.sirmaacademy.finalexam.footballStatistics.exceptions.InvalidIdException;
-import com.sirmaacademy.finalexam.footballStatistics.exceptions.InvalidLengthException;
-import com.sirmaacademy.finalexam.footballStatistics.exceptions.InvalidSymbolException;
+import com.sirmaacademy.finalexam.footballStatistics.exceptions.*;
+import com.sirmaacademy.finalexam.footballStatistics.model.enums.FieldPosition;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FootballGroup;
 
 public abstract class ValidateCsvDto {
+
+
+    public static FieldPosition validateFieldPosition(String position) {
+
+        for (FieldPosition p : FieldPosition.values()) {
+
+            if (p.name().equals(position.toUpperCase())) {
+                return FieldPosition.valueOf(position.toUpperCase());
+            }
+
+        }
+        throw new InvalidFieldPositionException("Field position: '" + position
+                + "' does not exist in modern football.");
+    }
+
+    public static int validateTeamNumber(int teamNumber) {
+
+        if (teamNumber < 1 || 99 < teamNumber) {
+            throw new InvalidPlayerTeamNumberException("Invalid team number: '" + teamNumber
+                    + "'. Team numbers should be in range: from 1 to 99");
+        }
+        return teamNumber;
+    }
 
     public static FootballGroup validateFootballGroup(String group) {
 
@@ -20,27 +41,27 @@ public abstract class ValidateCsvDto {
         throw new InvalidFootballGroupException("Invalid group: " + group + ". Football group should be a symbol from A to J");
     }
 
-    public static String validateManagerFullName(String managerFullName) {
+    public static String validatePersonFullName(String personFullName) {
 
-        if (managerFullName.isBlank()) {
+        if (personFullName.isBlank()) {
             throw new InvalidLengthException("Name can not be blank string.");
-        } else if (managerFullName.length() < 4) {
+        } else if (personFullName.length() < 4) {
             throw new InvalidLengthException("Full name should be at least 4 symbols long");
-        } else if (managerFullName.length() > 100) {
+        } else if (personFullName.length() > 100) {
             throw new InvalidLengthException("Name can't be more than 100 symbols long");
         }
 
-        for (char s : managerFullName.toCharArray()) {
+        for (char s : personFullName.toCharArray()) {
 
             if (( s < 32)
                     || ( 32 < s && s < 65)
                     || (90 < s && s < 97)
                     ||  122 < s) {
-                throw new InvalidSymbolException("Invalid symbol: '" + s + "' in manager full name.");
+                throw new InvalidSymbolException("Invalid symbol: '" + s + "' in person's full name.");
             }
 
         }
-        return managerFullName;
+        return personFullName;
     }
 
     public static String validateTeamName(String name) {
