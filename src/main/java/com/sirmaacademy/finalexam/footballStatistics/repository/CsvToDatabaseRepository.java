@@ -22,7 +22,7 @@ public class CsvToDatabaseRepository {
 
         for (Records r : records) {
             entityManager.createNativeQuery("INSERT INTO records (id, from_minutes, to_minutes, match_id, player_id)" +
-                    " VALUES (?, ?, ?, ?, ?)")
+                            " VALUES (?, ?, ?, ?, ?)")
                     .setParameter(1, r.getId())
                     .setParameter(2, r.getFromMinutes())
                     .setParameter(3, r.getToMinutes())
@@ -38,7 +38,7 @@ public class CsvToDatabaseRepository {
 
         for (Match m : matches) {
             entityManager.createNativeQuery("INSERT INTO matches (id, local_date)" +
-                    " VALUES (?, ?)")
+                            " VALUES (?, ?)")
                     .setParameter(1, m.getId())
                     .setParameter(2, m.getLocalDate())
                     .executeUpdate();
@@ -51,7 +51,7 @@ public class CsvToDatabaseRepository {
 
         for (Player p : players) {
             entityManager.createNativeQuery("INSERT INTO players (id, field_position, full_name, team_number, team_id)" +
-                    " VALUES (?, ?, ?, ?, ?)")
+                            " VALUES (?, ?, ?, ?, ?)")
                     .setParameter(1, p.getId())
                     .setParameter(2, p.getFieldPosition().name())
                     .setParameter(3, p.getFullName())
@@ -66,22 +66,15 @@ public class CsvToDatabaseRepository {
     public void saveTeams(List<Team> teams) {
 
         for (Team t : teams) {
-            try {
-                entityManager.createNativeQuery("INSERT INTO teams (id, name, manager_full_name, football_group)" +
-                                " VALUES (?, ?, ?, ?)")
-                        .setParameter(1, t.getId())
-                        .setParameter(2, t.getName())
-                        .setParameter(3, t.getManagerFullName())
-                        .setParameter(4, t.getFootballGroup().name())
-                        .executeUpdate();
-            } catch (Exception e) {
-                //TODO: put correct exception.
-            }
-
+            entityManager.createNativeQuery("INSERT INTO teams (id, name, manager_full_name, football_group)" +
+                            " VALUES (?, ?, ?, ?)")
+                    .setParameter(1, t.getId())
+                    .setParameter(2, t.getName())
+                    .setParameter(3, t.getManagerFullName())
+                    .setParameter(4, t.getFootballGroup().name())
+                    .executeUpdate();
         }
 
     }
-
-
 
 }
