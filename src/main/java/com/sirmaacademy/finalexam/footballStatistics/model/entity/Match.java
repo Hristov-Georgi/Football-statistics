@@ -24,11 +24,21 @@ public class Match {
     public Match() {
     }
 
+    /**
+     * Use when receive data from frontend.
+     * @param localDate
+     * @param scores
+     */
     public Match(LocalDate localDate, List<Score> scores) {
         this.localDate = localDate;
         this.scores = scores;
     }
 
+    /**
+     * Use when import data from csv file.
+     * @param id
+     * @param localDate
+     */
     public Match(Long id, LocalDate localDate) {
         this.id = id;
         this.localDate = localDate;

@@ -4,6 +4,8 @@ import com.sirmaacademy.finalexam.footballStatistics.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class MatchService {
 
@@ -17,5 +19,11 @@ public class MatchService {
     public boolean isMatchExist(Long id) {
         return this.matchRepository.existsById(id);
     }
+
+    public List<Long> getAllIds() {
+        return this.matchRepository.findAllIds();
+    }
+
+
 
 }
