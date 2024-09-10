@@ -24,7 +24,8 @@ public class LongestPlayedPairOfPlayersService {
         this.playerService = playerService;
     }
 
-    public LongestPlayedPairOfPlayers findLongestPlayedPlayerPairInCommonMatches() {
+    public List<LongestPlayedPairOfPlayers> findLongestPlayedPlayerPairInCommonMatches() {
+
         /**
          * pairTotalPlayedTimeMap and commonMatchesPlayed keys are concatenation
          * of firstPlayerId + | + secondPlayerId (for example: "1|2")
@@ -55,15 +56,15 @@ public class LongestPlayedPairOfPlayersService {
                     break;
                 }
 
-               // boolean isTrue = false;
+                boolean isTrue = false;
                 for (Records eachRecord : m.getValue()) {
 
-//                    if (firstRecord == eachRecord) {
-//                        isTrue = true;
-//                        continue;
-//                    }
+                    if (firstRecord == eachRecord) {
+                        isTrue = true;
+                        continue;
+                    }
 
-                   // if (isTrue) {                                                                //eachRecord
+                    if (isTrue) {                                                                //eachRecord
                         String playersPairNames = concatPlayerIds(firstRecord.getPlayer().getId(), eachRecord.getPlayer().getId());
 
                         int timePlayedTogether = timePlayedTogetherInCurrentMatch(firstRecord, eachRecord); //eachRecord
@@ -77,15 +78,15 @@ public class LongestPlayedPairOfPlayersService {
 
                         commonMatchPlayed.putIfAbsent(playersPairNames, new ArrayList<>());
                         commonMatchPlayed.get(playersPairNames).add(currentMatch);
-//                    }
-//
+                    }
+
                 }
-//                isTrue = false;
+                isTrue = false;
                 firstRecord = nextRecord;
             }
 
         }
-        //TODO: remove when finsih.
+        //TODO: remove
 //        Map<String, List<CommonPlayedMatchDto>> commonMap = commonMatchPlayed
 //                .entrySet()
 //                .stream()
@@ -94,18 +95,9 @@ public class LongestPlayedPairOfPlayersService {
 //                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
 //                        (e1, e2) -> e1, LinkedHashMap::new));
 
-        Map<String, Integer> resultMap = pairTotalPlayedTimeMap
-                .entrySet()
-                .stream()
-                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (e1, e2) -> e1, LinkedHashMap::new));
+        pairTotalPlayedTimeMap = sortPairTotalPlayedMap(pairTotalPlayedTimeMap);
 
-        String resultMapKey = extractMapKey(resultMap);
-
-        //TODO: return list if a lot of pairs returned
-        return new LongestPlayedPairOfPlayers(extractPlayersFromMapKey(resultMapKey),
-                resultMap.get(resultMapKey), commonMatchPlayed.get(resultMapKey));
+        return getListOfLongestPlayedPlayers(pairTotalPlayedTimeMap, commonMatchPlayed);
     }
 
     private Map<Long, List<Records>> getRecordsGroupedByMatchId() {
@@ -149,16 +141,69 @@ public class LongestPlayedPairOfPlayersService {
         return List.of(firstPlayer, secondPlayer);
     }
 
-    private String extractMapKey(Map<String, Integer> map) {
-        String name = null;
-        for (Map.Entry<String, Integer> m : map.entrySet()){
-            name = m.getKey();
-        }
+    private List<CommonPlayedMatchDto> extractListOfCommonPlayedMatchesById(String id,
+                                        Map<String, List<CommonPlayedMatchDto>> commonPlayedMatches) {
 
-        if (name == null) {
-            throw new NullPointerException("Map Key is null");
+        for (Map.Entry<String, List<CommonPlayedMatchDto>> m : commonPlayedMatches.entrySet()) {
+
+            if (m.getKey().equals(id)) {
+                return m.getValue();
+            }
+
         }
-        return name;
+        throw new RuntimeException("Record with id '" + id + "' was not found.");
+    }
+
+//    //TODO: remove
+//    private String extractMapKey(Map<String, Integer> map) {
+//        String name = null;
+//        for (Map.Entry<String, Integer> m : map.entrySet()){
+//            name = m.getKey();
+//        }
+//
+//        if (name == null) {
+//            throw new NullPointerException("Map Key is null");
+//        }
+//        return name;
+//    }
+
+    //TODO: set better name :)
+    private Map<String, Integer> sortPairTotalPlayedMap(Map<String, Integer> playersMap) {
+        return playersMap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    private List<LongestPlayedPairOfPlayers> getListOfLongestPlayedPlayers(
+            Map<String, Integer> sortedPlayersPairs,
+            Map<String, List<CommonPlayedMatchDto>> commonPlayedMatches) {
+
+        Integer duration = null;
+        List<LongestPlayedPairOfPlayers> longestPlayList = new ArrayList<>();
+
+        for (Map.Entry<String, Integer> spp : sortedPlayersPairs.entrySet()) {
+
+            if (duration == null) {
+                duration = spp.getValue();
+            }
+
+            if (spp.getValue() < duration) {
+                return longestPlayList;
+            }
+
+            List<Player> players = extractPlayersFromMapKey(spp.getKey());
+            Integer totalPlayedTimeTogether = spp.getValue();
+            List<CommonPlayedMatchDto> matchesList = extractListOfCommonPlayedMatchesById(
+                    spp.getKey(), commonPlayedMatches);
+
+            LongestPlayedPairOfPlayers longestPlay = new LongestPlayedPairOfPlayers(
+                    players, totalPlayedTimeTogether, matchesList);
+            longestPlayList.add(longestPlay);
+        }
+        return longestPlayList;
     }
 
 }
