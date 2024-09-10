@@ -5,7 +5,6 @@ import com.sirmaacademy.finalexam.footballStatistics.model.entity.Player;
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.Records;
 import com.sirmaacademy.finalexam.footballStatistics.model.response.LongestPlayedPairOfPlayers;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
@@ -25,7 +24,6 @@ public class LongestPlayedPairOfPlayersService {
         this.playerService = playerService;
     }
 
-    //TODO: change return value
     public LongestPlayedPairOfPlayers findLongestPlayedPlayerPairInCommonMatches() {
         /**
          * pairTotalPlayedTimeMap and commonMatchesPlayed keys are concatenation
@@ -92,8 +90,9 @@ public class LongestPlayedPairOfPlayersService {
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .limit(1)
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+                .limit(100)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+                        (e1, e2) -> e1, LinkedHashMap::new ));
 
         String resultMapKey = extractMapKey(resultMap);
 
