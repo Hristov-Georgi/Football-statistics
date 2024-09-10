@@ -1,24 +1,26 @@
 package com.sirmaacademy.finalexam.footballStatistics.model.dto;
 
 
+import com.sirmaacademy.finalexam.footballStatistics.model.entity.Match;
+
 public class CommonPlayedMatchDto {
 
-    private Long matchId;
+    private Match match;
     private Integer playersTimePlayedTogether;
     private Integer matchTotalDuration;
 
-    public CommonPlayedMatchDto(Long matchId, Integer playersTimePlayedTogether, Integer matchTotalDuration) {
-        this.matchId = matchId;
+    public CommonPlayedMatchDto(Match match, Integer playersTimePlayedTogether, Integer matchTotalDuration) {
+        this.match = match;
         this.playersTimePlayedTogether = playersTimePlayedTogether;
         this.matchTotalDuration = matchTotalDuration;
     }
 
-    public Long getMatchId() {
-        return matchId;
+    public Match getMatch() {
+        return match;
     }
 
-    public void setMatchId(Long matchId) {
-        this.matchId = matchId;
+    public void setMatch(Match match) {
+        this.match = match;
     }
 
     public Integer getPlayersTimePlayedTogether() {
