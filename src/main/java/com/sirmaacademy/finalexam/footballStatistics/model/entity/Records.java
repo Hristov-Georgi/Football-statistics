@@ -23,14 +23,21 @@ public class Records {
     private Integer toMinutes;
 
     @Transient
-    private Long playerId;
+    private Long playerIdFromCsvFile;
 
     @Transient
-    private Long matchId;
+    private Long matchIdFromCsvFile;
 
     public Records() {
     }
 
+    /**
+     * Use when import/receive data from frontend client.
+     * @param player
+     * @param match
+     * @param fromMinutes
+     * @param toMinutes
+     */
     public Records(Player player, Match match, Integer fromMinutes, Integer toMinutes) {
         this.player = player;
         this.match = match;
@@ -38,10 +45,18 @@ public class Records {
         this.toMinutes = toMinutes;
     }
 
-    public Records(long id, Long playerId, Long matchId, Integer fromMinutes, Integer toMinutes) {
+    /**
+     * Use when import data from csv file.
+     * @param id
+     * @param playerIdFromCsvFile
+     * @param matchIdFromCsvFile
+     * @param fromMinutes
+     * @param toMinutes
+     */
+    public Records(long id, Long playerIdFromCsvFile, Long matchIdFromCsvFile, Integer fromMinutes, Integer toMinutes) {
         this.id = id;
-        this.playerId = playerId;
-        this.matchId = matchId;
+        this.playerIdFromCsvFile = playerIdFromCsvFile;
+        this.matchIdFromCsvFile = matchIdFromCsvFile;
         this.fromMinutes = fromMinutes;
         this.toMinutes = toMinutes;
     }
@@ -86,19 +101,20 @@ public class Records {
         this.toMinutes = toMinutes;
     }
 
-    public Long getPlayerId() {
-        return playerId;
+    public Long getPlayerIdFromCsvFile() {
+        return playerIdFromCsvFile;
     }
 
-    public void setPlayerId(Long playerId) {
-        this.playerId = playerId;
+    public void setPlayerIdFromCsvFile(Long playerIdFromCsvFile) {
+        this.playerIdFromCsvFile = playerIdFromCsvFile;
     }
 
-    public Long getMatchId() {
-        return matchId;
+    public Long getMatchIdFromCsvFile() {
+        return matchIdFromCsvFile;
     }
 
-    public void setMatchId(Long matchId) {
-        this.matchId = matchId;
+    public void setMatchIdFromCsvFile(Long matchIdFromCsvFile) {
+        this.matchIdFromCsvFile = matchIdFromCsvFile;
     }
+
 }

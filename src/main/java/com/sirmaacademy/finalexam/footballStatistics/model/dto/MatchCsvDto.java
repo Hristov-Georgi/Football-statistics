@@ -1,5 +1,8 @@
 package com.sirmaacademy.finalexam.footballStatistics.model.dto;
 
+/**
+ * Use this DTO to match and transfer data from matches.csv file format to the application entity.
+ */
 public class MatchCsvDto {
 
     private Long id;

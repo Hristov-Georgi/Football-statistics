@@ -1,5 +1,8 @@
 package com.sirmaacademy.finalexam.footballStatistics.model.enums;
 
+/**
+ * Current football players positions on the field. Last update 09.09.2024
+ */
 public enum FieldPosition {
 
     CF("Centre forward"),

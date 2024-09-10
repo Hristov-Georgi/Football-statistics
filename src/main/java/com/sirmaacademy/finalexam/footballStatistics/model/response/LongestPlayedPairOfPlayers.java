@@ -9,13 +9,13 @@ public class LongestPlayedPairOfPlayers {
 
     private List<Player> players;
     private Integer totalTimePlayedTogether;
-    private List<CommonPlayedMatchDto> commonPlayedMatchDtos;
+    private List<CommonPlayedMatchDto> commonPlayedMatches;
 
     public LongestPlayedPairOfPlayers(List<Player> players, Integer totalTimePlayedTogether,
-                                      List<CommonPlayedMatchDto> commonPlayedMatchDtos) {
+                                      List<CommonPlayedMatchDto> commonPlayedMatches) {
         this.players = players;
         this.totalTimePlayedTogether = totalTimePlayedTogether;
-        this.commonPlayedMatchDtos = commonPlayedMatchDtos;
+        this.commonPlayedMatches = commonPlayedMatches;
     }
 
     public List<Player> getPlayers() {
@@ -34,11 +34,11 @@ public class LongestPlayedPairOfPlayers {
         this.totalTimePlayedTogether = totalTimePlayedTogether;
     }
 
-    public List<CommonPlayedMatchDto> getCommonPlayedMatchDtos() {
-        return commonPlayedMatchDtos;
+    public List<CommonPlayedMatchDto> getCommonPlayedMatches() {
+        return commonPlayedMatches;
     }
 
-    public void setCommonPlayedMatchDtos(List<CommonPlayedMatchDto> commonPlayedMatchDtos) {
-        this.commonPlayedMatchDtos = commonPlayedMatchDtos;
+    public void setCommonPlayedMatches(List<CommonPlayedMatchDto> commonPlayedMatches) {
+        this.commonPlayedMatches = commonPlayedMatches;
     }
 }

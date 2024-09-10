@@ -22,6 +22,9 @@ import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main class responsible for final csv data validation before objects being persisted in database.
+ */
 @Service
 public class CsvToDatabaseService {
     private static final Logger logger = LoggerFactory.getLogger(CsvToDatabaseService.class);
@@ -43,6 +46,11 @@ public class CsvToDatabaseService {
         this.matchService = matchService;
     }
 
+    /**
+     * Final validation for data from records.csv file.
+     * Persist all valid data in database.
+     * If some data is invalid it is logged via Logger and method continues with validation of next data object.
+     */
     public void persistRecordsToDatabase() {
         List<Records> recordsList = new ArrayList<>();
 
@@ -79,6 +87,9 @@ public class CsvToDatabaseService {
      * I know it is not recommended. Method should do only one operation.
      * But all data comes from matches.csv file and according to my project structure
      * this is the optimal decision I make, because I read only once the file data.
+     * Final validation for data from matches.csv file.
+     * Persist all valid data in database.
+     * If some data is invalid it is logged via Logger and method continues with validation of next data object.
      */
     public void persistScoresAndMatchesToDatabase() {
         List<Match> matches = new ArrayList<>();
@@ -122,6 +133,11 @@ public class CsvToDatabaseService {
         this.scoreService.saveAllScores(scores);
     }
 
+    /**
+     * Final validation for data from players.csv file.
+     * Persist all valid data in database.
+     * If some data is invalid it is logged via Logger and method continues with validation of next data object.
+     */
     public void persistPlayersToDatabase() {
         List<Player> players = new ArrayList<>();
 
@@ -153,6 +169,11 @@ public class CsvToDatabaseService {
         this.csvToDatabaseRepository.savePlayers(players);
     }
 
+    /**
+     * Final validation for data from teams.csv file.
+     * Persist all valid data in database.
+     * If some data is invalid it is logged via Logger and method continues with validation of next data object.
+     */
     public void persistTeamsToDatabase() {
         List<Team> teams = new ArrayList<>();
 

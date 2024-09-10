@@ -1,5 +1,8 @@
 package com.sirmaacademy.finalexam.footballStatistics.model.enums;
 
+/**
+ * Football groups according UEFA website. Last information update - 09.09.2024
+ */
 public enum FootballGroup {
 
     A ("A"),

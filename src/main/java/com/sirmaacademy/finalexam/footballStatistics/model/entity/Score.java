@@ -22,6 +22,14 @@ public class Score {
     public Score() {
     }
 
+    /**
+     * Created this class for better data handling.
+     * Use when import/receive data either from frontend client or csv file.
+     * Data is fetched from matches.csv
+     * @param team
+     * @param scoredGoals
+     * @param match
+     */
     public Score(Team team, String scoredGoals, Match match) {
         this.team = team;
         this.scoredGoals = scoredGoals;

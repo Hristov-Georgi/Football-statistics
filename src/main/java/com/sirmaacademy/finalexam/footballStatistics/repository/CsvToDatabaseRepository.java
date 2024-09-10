@@ -11,6 +11,9 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+/**
+ * Use to persist data from csv file to the database using Insert statements.
+ */
 @Repository
 public class CsvToDatabaseRepository {
 
@@ -26,8 +29,8 @@ public class CsvToDatabaseRepository {
                     .setParameter(1, r.getId())
                     .setParameter(2, r.getFromMinutes())
                     .setParameter(3, r.getToMinutes())
-                    .setParameter(4, r.getMatchId())
-                    .setParameter(5, r.getPlayerId())
+                    .setParameter(4, r.getMatchIdFromCsvFile())
+                    .setParameter(5, r.getPlayerIdFromCsvFile())
                     .executeUpdate();
         }
 

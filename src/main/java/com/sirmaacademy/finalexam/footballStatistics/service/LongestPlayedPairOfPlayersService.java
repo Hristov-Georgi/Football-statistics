@@ -55,47 +55,55 @@ public class LongestPlayedPairOfPlayersService {
                     break;
                 }
 
-                boolean isTrue = false;
+               // boolean isTrue = false;
                 for (Records eachRecord : m.getValue()) {
 
-                    if (firstRecord == eachRecord) {
-                        isTrue = true;
-                        continue;
-                    }
+//                    if (firstRecord == eachRecord) {
+//                        isTrue = true;
+//                        continue;
+//                    }
 
-                    if (isTrue) {
+                   // if (isTrue) {                                                                //eachRecord
                         String playersPairNames = concatPlayerIds(firstRecord.getPlayer().getId(), eachRecord.getPlayer().getId());
 
-                        int timePlayedTogether = timePlayedTogetherInCurrentMatch(firstRecord, eachRecord);
+                        int timePlayedTogether = timePlayedTogetherInCurrentMatch(firstRecord, eachRecord); //eachRecord
 
                         pairTotalPlayedTimeMap.putIfAbsent(playersPairNames, 0);
                         pairTotalPlayedTimeMap.put(playersPairNames,
                                 pairTotalPlayedTimeMap.get(playersPairNames) + timePlayedTogether);
 
                         CommonPlayedMatchDto currentMatch =
-                                new CommonPlayedMatchDto(firstRecord.getMatch().getId(), timePlayedTogether, matchDuration);
+                                new CommonPlayedMatchDto(firstRecord.getMatch(), timePlayedTogether, matchDuration);
 
                         commonMatchPlayed.putIfAbsent(playersPairNames, new ArrayList<>());
                         commonMatchPlayed.get(playersPairNames).add(currentMatch);
-                    }
-
+//                    }
+//
                 }
-                isTrue = false;
+//                isTrue = false;
                 firstRecord = nextRecord;
             }
 
         }
+        //TODO: remove when finsih.
+//        Map<String, List<CommonPlayedMatchDto>> commonMap = commonMatchPlayed
+//                .entrySet()
+//                .stream()
+//                .sorted(Comparator.comparingInt(v -> v.getValue().size()))
+//                .filter(v -> v.getValue().size() > 5)
+//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
+//                        (e1, e2) -> e1, LinkedHashMap::new));
 
         Map<String, Integer> resultMap = pairTotalPlayedTimeMap
                 .entrySet()
                 .stream()
                 .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
-                .limit(100)
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-                        (e1, e2) -> e1, LinkedHashMap::new ));
+                        (e1, e2) -> e1, LinkedHashMap::new));
 
         String resultMapKey = extractMapKey(resultMap);
 
+        //TODO: return list if a lot of pairs returned
         return new LongestPlayedPairOfPlayers(extractPlayersFromMapKey(resultMapKey),
                 resultMap.get(resultMapKey), commonMatchPlayed.get(resultMapKey));
     }
@@ -133,7 +141,7 @@ public class LongestPlayedPairOfPlayersService {
 
     private List<Player> extractPlayersFromMapKey(String mapKeyIds) {
         Long firstPlayerId = Long.parseLong(mapKeyIds.split("\\|")[0]);
-        Long secondPlayerId = Long.parseLong(mapKeyIds.split("\\|")[0]);
+        Long secondPlayerId = Long.parseLong(mapKeyIds.split("\\|")[1]);
 
         Player firstPlayer = this.playerService.getById(firstPlayerId);
         Player secondPlayer = this.playerService.getById(secondPlayerId);

@@ -4,7 +4,6 @@ import com.sirmaacademy.finalexam.footballStatistics.model.dto.MatchCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.PlayerCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.RecordCsvDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.TeamCsvDto;
-import com.sirmaacademy.finalexam.footballStatistics.validation.ValidateCsvDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -16,6 +15,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Main class for reading data from csv resource files.
+ * Methods are separated for every single file for better maintenance if something change.
+ */
 @Service
 public class ReadCSV {
     private static final String TEAMS_CSV_FILE = "src/main/resources/input_data_csv/teams.csv";
@@ -27,6 +30,12 @@ public class ReadCSV {
 
     private static final Logger logger = LoggerFactory.getLogger(ReadCSV.class);
 
+    /**
+     * Extract all data from records.csv file.
+     * Initial validation for datatype compatibility and removes all unnecessary whitespace.
+     * Exceptions are logged via Logger and the application continues execution.
+     * @return
+     */
     public List<RecordCsvDto> extractRecordsData() {
         List<RecordCsvDto> records = new ArrayList<>();
 
