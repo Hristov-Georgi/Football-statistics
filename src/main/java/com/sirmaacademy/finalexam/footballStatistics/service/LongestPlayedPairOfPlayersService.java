@@ -1,26 +1,32 @@
 package com.sirmaacademy.finalexam.footballStatistics.service;
 
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.CommonPlayedMatchDto;
+import com.sirmaacademy.finalexam.footballStatistics.model.entity.Player;
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.Records;
+import com.sirmaacademy.finalexam.footballStatistics.model.response.LongestPlayedPairOfPlayers;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class LongestPlayedPairOfPlayersService {
 
     private final RecordsService recordsService;
     private final MatchService matchService;
+    private final PlayerService playerService;
 
     @Autowired
-    public LongestPlayedPairOfPlayersService(RecordsService recordsService, MatchService matchService) {
+    public LongestPlayedPairOfPlayersService(RecordsService recordsService, MatchService matchService, PlayerService playerService) {
         this.recordsService = recordsService;
         this.matchService = matchService;
+        this.playerService = playerService;
     }
 
     //TODO: change return value
-    public void  findLongestPlayedPlayerPairInCommonMatches() {
+    public LongestPlayedPairOfPlayers findLongestPlayedPlayerPairInCommonMatches() {
         /**
          * pairTotalPlayedTimeMap and commonMatchesPlayed keys are concatenation
          * of firstPlayerId + | + secondPlayerId (for example: "1|2")
@@ -61,6 +67,7 @@ public class LongestPlayedPairOfPlayersService {
 
                     if (isTrue) {
                         String playersPairNames = concatPlayerIds(firstRecord.getPlayer().getId(), eachRecord.getPlayer().getId());
+
                         int timePlayedTogether = timePlayedTogetherInCurrentMatch(firstRecord, eachRecord);
 
                         pairTotalPlayedTimeMap.putIfAbsent(playersPairNames, 0);
@@ -81,8 +88,17 @@ public class LongestPlayedPairOfPlayersService {
 
         }
 
-        System.out.println();
+        Map<String, Integer> resultMap = pairTotalPlayedTimeMap
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Integer>comparingByValue().reversed())
+                .limit(1)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
+        String resultMapKey = extractMapKey(resultMap);
+
+        return new LongestPlayedPairOfPlayers(extractPlayersFromMapKey(resultMapKey),
+                resultMap.get(resultMapKey), commonMatchPlayed.get(resultMapKey));
     }
 
     private Map<Long, List<Records>> getRecordsGroupedByMatchId() {
@@ -116,10 +132,26 @@ public class LongestPlayedPairOfPlayersService {
         return this.recordsService.getTotalMatchDuration(matchId);
     }
 
+    private List<Player> extractPlayersFromMapKey(String mapKeyIds) {
+        Long firstPlayerId = Long.parseLong(mapKeyIds.split("\\|")[0]);
+        Long secondPlayerId = Long.parseLong(mapKeyIds.split("\\|")[0]);
 
+        Player firstPlayer = this.playerService.getById(firstPlayerId);
+        Player secondPlayer = this.playerService.getById(secondPlayerId);
 
+        return List.of(firstPlayer, secondPlayer);
+    }
 
+    private String extractMapKey(Map<String, Integer> map) {
+        String name = null;
+        for (Map.Entry<String, Integer> m : map.entrySet()){
+            name = m.getKey();
+        }
 
-
+        if (name == null) {
+            throw new NullPointerException("Map Key is null");
+        }
+        return name;
+    }
 
 }
