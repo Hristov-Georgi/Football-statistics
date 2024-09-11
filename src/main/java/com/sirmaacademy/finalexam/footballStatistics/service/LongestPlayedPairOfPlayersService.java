@@ -1,9 +1,8 @@
 package com.sirmaacademy.finalexam.footballStatistics.service;
 
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.CommonPlayedMatchDto;
-import com.sirmaacademy.finalexam.footballStatistics.model.entity.Player;
-import com.sirmaacademy.finalexam.footballStatistics.model.entity.Records;
-import com.sirmaacademy.finalexam.footballStatistics.model.response.LongestPlayedPairOfPlayers;
+import com.sirmaacademy.finalexam.footballStatistics.model.entity.*;
+import com.sirmaacademy.finalexam.footballStatistics.model.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,7 +23,7 @@ public class LongestPlayedPairOfPlayersService {
         this.playerService = playerService;
     }
 
-    public List<LongestPlayedPairOfPlayers> findLongestPlayedPlayerPairInCommonMatches() {
+    public List<LongestPlayedPairOfPlayersResponse> findLongestPlayedPlayerPairInCommonMatches() {
 
         /**
          * pairTotalPlayedTimeMap and commonMatchesPlayed keys are concatenation
@@ -73,8 +72,10 @@ public class LongestPlayedPairOfPlayersService {
                         pairTotalPlayedTimeMap.put(playersPairNames,
                                 pairTotalPlayedTimeMap.get(playersPairNames) + timePlayedTogether);
 
+                        MatchDtoResponse matchDtoResponse = mapMatchToMatchDtoResponse(firstRecord.getMatch());
+
                         CommonPlayedMatchDto currentMatch =
-                                new CommonPlayedMatchDto(firstRecord.getMatch(), timePlayedTogether, matchDuration);
+                                new CommonPlayedMatchDto(matchDtoResponse, timePlayedTogether, matchDuration);
 
                         commonMatchPlayed.putIfAbsent(playersPairNames, new ArrayList<>());
                         commonMatchPlayed.get(playersPairNames).add(currentMatch);
@@ -131,14 +132,39 @@ public class LongestPlayedPairOfPlayersService {
         return this.recordsService.getTotalMatchDuration(matchId);
     }
 
-    private List<Player> extractPlayersFromMapKey(String mapKeyIds) {
+    private MatchDtoResponse mapMatchToMatchDtoResponse(Match match) {
+        List<ScoreDtoResponse> scoresDtoList = new ArrayList<>();
+
+        for (Score s : match.getScores()) {
+            scoresDtoList.add(mapScoreToscoreDtoResponse(s));
+        }
+
+        return new MatchDtoResponse(match.getLocalDate(), scoresDtoList);
+    }
+
+    private ScoreDtoResponse mapScoreToscoreDtoResponse(Score score) {
+        TeamDtoResponse teamDto = mapTeamToTeamDtoResponse(score.getTeam());
+
+        return new ScoreDtoResponse(teamDto, score.getScoredGoals());
+    }
+
+    private TeamDtoResponse mapTeamToTeamDtoResponse(Team team) {
+        return new TeamDtoResponse(team.getName(), team.getManagerFullName(), team.getFootballGroup());
+    }
+
+    private List<PlayerDtoResponse> extractPlayersResponseFromMapKey(String mapKeyIds) {
         Long firstPlayerId = Long.parseLong(mapKeyIds.split("\\|")[0]);
         Long secondPlayerId = Long.parseLong(mapKeyIds.split("\\|")[1]);
 
         Player firstPlayer = this.playerService.getById(firstPlayerId);
         Player secondPlayer = this.playerService.getById(secondPlayerId);
 
-        return List.of(firstPlayer, secondPlayer);
+        PlayerDtoResponse firstPlayerResponse = new PlayerDtoResponse(
+                firstPlayer.getTeamNumber(), firstPlayer.getFieldPosition(), firstPlayer.getFullName());
+        PlayerDtoResponse secondPlayerResponse = new PlayerDtoResponse(
+                secondPlayer.getTeamNumber(), secondPlayer.getFieldPosition(), secondPlayer.getFullName());
+
+        return List.of(firstPlayerResponse, secondPlayerResponse);
     }
 
     private List<CommonPlayedMatchDto> extractListOfCommonPlayedMatchesById(String id,
@@ -177,12 +203,12 @@ public class LongestPlayedPairOfPlayersService {
                         (e1, e2) -> e1, LinkedHashMap::new));
     }
 
-    private List<LongestPlayedPairOfPlayers> getListOfLongestPlayedPlayers(
+    private List<LongestPlayedPairOfPlayersResponse> getListOfLongestPlayedPlayers(
             Map<String, Integer> sortedPlayersPairs,
             Map<String, List<CommonPlayedMatchDto>> commonPlayedMatches) {
 
         Integer duration = null;
-        List<LongestPlayedPairOfPlayers> longestPlayList = new ArrayList<>();
+        List<LongestPlayedPairOfPlayersResponse> longestPlayList = new ArrayList<>();
 
         for (Map.Entry<String, Integer> spp : sortedPlayersPairs.entrySet()) {
 
@@ -194,13 +220,13 @@ public class LongestPlayedPairOfPlayersService {
                 return longestPlayList;
             }
 
-            List<Player> players = extractPlayersFromMapKey(spp.getKey());
+            List<PlayerDtoResponse> playersDto = extractPlayersResponseFromMapKey(spp.getKey());
             Integer totalPlayedTimeTogether = spp.getValue();
             List<CommonPlayedMatchDto> matchesList = extractListOfCommonPlayedMatchesById(
                     spp.getKey(), commonPlayedMatches);
 
-            LongestPlayedPairOfPlayers longestPlay = new LongestPlayedPairOfPlayers(
-                    players, totalPlayedTimeTogether, matchesList);
+            LongestPlayedPairOfPlayersResponse longestPlay = new LongestPlayedPairOfPlayersResponse(
+                    playersDto, totalPlayedTimeTogether, matchesList);
             longestPlayList.add(longestPlay);
         }
         return longestPlayList;
