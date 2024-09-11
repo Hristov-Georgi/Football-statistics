@@ -1,10 +1,26 @@
 package com.sirmaacademy.finalexam.footballStatistics.model.request;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.Range;
+
 public class PlayerRegisterRequest {
 
-    private int teamNumber;
+    @NotNull
+    @Range(max = 99)
+    private Integer teamNumber;
+
+    @NotBlank
+    @Length(min = 2)
     private String position;
+
+    @NotBlank
+    @Length(min = 4, max = 100)
     private String fullName;
+
+    @NotBlank
+    @Length(min = 4, max = 100)
     private String teamName;
 
     public PlayerRegisterRequest() {
