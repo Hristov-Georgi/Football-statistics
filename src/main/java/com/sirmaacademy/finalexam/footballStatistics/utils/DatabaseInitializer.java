@@ -24,17 +24,16 @@ public class DatabaseInitializer implements CommandLineRunner {
     }
 
     /**
+     * Uncomment on first program start.
      * Comment out the code after first start.
-     * @param args
-     * @throws Exception
      */
     @Override
     public void run(String... args) throws Exception {
 
-//        this.csvToDatabaseService.persistTeamsToDatabase();
-//        this.csvToDatabaseService.persistPlayersToDatabase();
-//        this.csvToDatabaseService.persistScoresAndMatchesToDatabase();
-//        this.csvToDatabaseService.persistRecordsToDatabase();
+        this.csvToDatabaseService.persistTeamsToDatabase();
+        this.csvToDatabaseService.persistPlayersToDatabase();
+        this.csvToDatabaseService.persistScoresAndMatchesToDatabase();
+        this.csvToDatabaseService.persistRecordsToDatabase();
 
 
     }

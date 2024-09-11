@@ -25,6 +25,9 @@ public class LongestPlayedPairOfPlayersService {
         this.playerService = playerService;
     }
 
+    /**
+     * Main logic to extract all pair of players who have played together in common matches.
+     */
     public List<LongestPlayedPairOfPlayersResponse> findLongestPlayedPlayerPairInCommonMatches() {
 
         /**
@@ -95,6 +98,9 @@ public class LongestPlayedPairOfPlayersService {
         return getListOfLongestPlayedPlayers(pairTotalPlayedTimeMap, commonMatchPlayed);
     }
 
+    /**
+     * Return Map with Key - matchID and Value - List<Records> for that match.
+     */
     private Map<Long, List<Records>> getRecordsGroupedByMatchId() {
         Map<Long, List<Records>> recordsByMatchIdMap = new HashMap<>();
         List<Long> matchIdList = this.matchService.getAllIds();
@@ -107,12 +113,18 @@ public class LongestPlayedPairOfPlayersService {
         return recordsByMatchIdMap;
     }
 
+    /**
+     * Concatenates players id's in unique username, which is used as Key in the storage Maps.
+     */
     private String concatPlayerIds(Long firstPlayerId, Long secondPlayerId) {
         return String.join("|",
                 String.valueOf(firstPlayerId),
                 String.valueOf(secondPlayerId));
     }
 
+    /**
+     * Calculate and return total played time together for players pair in common match.
+     */
     private Integer timePlayedTogetherInCurrentMatch(Records firstPlayer, Records secondPlayer) {
 
         int fromTime = Math.max(firstPlayer.getFromMinutes(), secondPlayer.getFromMinutes());
@@ -122,10 +134,17 @@ public class LongestPlayedPairOfPlayersService {
         return Math.max(num, 0);
     }
 
+    /**
+     * Return total match duration for single match.
+     * Data is fetched from database.
+     */
     private int getTotalMatchDuration(Long matchId) {
         return this.recordsService.getTotalMatchDuration(matchId);
     }
 
+    /**
+     * Map single Match object to DTO object.
+     */
     private MatchDtoResponse mapMatchToMatchDtoResponse(Match match) {
         List<ScoreDtoResponse> scoresDtoList = new ArrayList<>();
 
@@ -136,16 +155,26 @@ public class LongestPlayedPairOfPlayersService {
         return new MatchDtoResponse(match.getLocalDate(), scoresDtoList);
     }
 
+    /**
+     * Map Score object to DTO object.
+     */
     private ScoreDtoResponse mapScoreToscoreDtoResponse(Score score) {
         TeamDtoResponse teamDto = mapTeamToTeamDtoResponse(score.getTeam());
 
         return new ScoreDtoResponse(teamDto, score.getScoredGoals());
     }
 
+    /**
+     * Map Team object to DTO object.
+     */
     private TeamDtoResponse mapTeamToTeamDtoResponse(Team team) {
         return new TeamDtoResponse(team.getName(), team.getManagerFullName(), team.getFootballGroup());
     }
 
+    /**
+     * Extract Player objects from map key value.
+     * Map Player object to DTO object.
+     */
     private List<PlayerStatisticDtoResponse> extractPlayersResponseFromMapKey(String mapKeyIds) {
         Long firstPlayerId = Long.parseLong(mapKeyIds.split("\\|")[0]);
         Long secondPlayerId = Long.parseLong(mapKeyIds.split("\\|")[1]);
@@ -161,6 +190,9 @@ public class LongestPlayedPairOfPlayersService {
         return List.of(firstPlayerResponse, secondPlayerResponse);
     }
 
+    /**
+     * Extract List<CommonPlayedMatchDto> for specific pair of players.
+     */
     private List<CommonPlayedMatchDto> extractListOfCommonPlayedMatchesById(String id,
                                         Map<String, List<CommonPlayedMatchDto>> commonPlayedMatches) {
 
@@ -174,6 +206,9 @@ public class LongestPlayedPairOfPlayersService {
         throw new RuntimeException("Record with id '" + id + "' was not found.");
     }
 
+    /**
+     * Sort a Map by Value in reversed order.
+     */
     private Map<String, Integer> sortMapByValueInteger(Map<String, Integer> playersMap) {
         return playersMap
                 .entrySet()
@@ -183,6 +218,10 @@ public class LongestPlayedPairOfPlayersService {
                         (e1, e2) -> e1, LinkedHashMap::new));
     }
 
+    /**
+     * Return refined List of longest played pair of players in common matches.
+     * Return only the players with the longest time. Time is compared by the topmost value.
+     */
     private List<LongestPlayedPairOfPlayersResponse> getListOfLongestPlayedPlayers(
             Map<String, Integer> sortedPlayersPairs,
             Map<String, List<CommonPlayedMatchDto>> commonPlayedMatches) {

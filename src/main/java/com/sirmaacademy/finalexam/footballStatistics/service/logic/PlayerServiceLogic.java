@@ -45,6 +45,9 @@ public class PlayerServiceLogic implements PlayerService {
                 .orElseThrow(() -> new PlayerNotFoundException("Player with id: '" + id + "' not found."));
     }
 
+    /**
+     * Return object of players and their teams.
+     */
     @Override
     public List<PlayerDtoResponse> getByName(String name) {
        List<Player> playersList = this.playerRepository.findByFullNameContainingIgnoreCase(name)
@@ -166,6 +169,9 @@ public class PlayerServiceLogic implements PlayerService {
 
     }
 
+    /**
+     * Return FieldPosition enum from a String value.
+     */
     private FieldPosition extractFieldPosition(String position) {
 
         for (FieldPosition p : FieldPosition.values()) {
@@ -179,6 +185,9 @@ public class PlayerServiceLogic implements PlayerService {
                 position + "'.");
     }
 
+    /**
+     * Return Team if exist in database.
+     */
     private Team extractTeam(String teamName) {
         return this.teamRepository.findByNameIgnoreCase(teamName)
                 .orElseThrow(() -> new InvalidTeamException("Team: '" + teamName + "' does not exist."));

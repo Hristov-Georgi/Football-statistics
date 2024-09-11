@@ -21,6 +21,10 @@ public class PlayerStatisticsController {
         this.longestPlayedPairOfPlayersService = longestPlayedPairOfPlayersService;
     }
 
+    /**
+     * Return all players who have played for the longest time together in common matches, and
+     * matches they played together.
+     */
     @GetMapping("/players/longestPlayedPairInCommonMatches")
     public ResponseEntity<List<LongestPlayedPairOfPlayersResponse>> pairOfLongestPlayedPlayersInCommonMatches() {
         return ResponseEntity.ok(longestPlayedPairOfPlayersService.findLongestPlayedPlayerPairInCommonMatches());

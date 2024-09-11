@@ -87,7 +87,7 @@ public class CsvToDatabaseService {
     }
 
     /**
-     * I know it is not recommended. Method should do only one operation.
+     * I know it is not recommended. Method should only do one operation.
      * But all data comes from matches.csv file and according to my project structure
      * this is the optimal decision I make, because I read only once the file data.
      * Final validation for data from matches.csv file.

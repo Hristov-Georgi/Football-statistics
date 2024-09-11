@@ -33,7 +33,7 @@ public class ReadCSV {
     /**
      * Extract all data from records.csv file.
      * Initial validation for datatype compatibility and removes all unnecessary whitespace.
-     * Exceptions are logged via Logger and the application continues execution.
+     * Exceptions are logged via Logger and application continues execution.
      * @return
      */
     public List<RecordCsvDto> extractRecordsData() {

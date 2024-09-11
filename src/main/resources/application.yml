@@ -27,10 +27,3 @@ spring:
       SQL: DEBUG
       type.descriptor.sql.BasicBinder: TRACE
       orm.jdbc.bind: TRACE
-
-
-#JWT
-#  jwt:
-#    security:
-#      secret-key: 2104395e07cf2208af79a5f21b9769385429610dda4d076653efb0a0462b4a7e
-#      duration-ms: 3600000  #one hour

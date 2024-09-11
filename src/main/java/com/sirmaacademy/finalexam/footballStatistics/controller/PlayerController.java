@@ -25,6 +25,9 @@ public class PlayerController {
         this.playerService = playerService;
     }
 
+    /**
+     * Find and return all players by name.
+     */
     @GetMapping("/findByName")
     public ResponseEntity<List<PlayerDtoResponse>> findPlayersByName(@RequestParam String name) {
 
@@ -35,6 +38,7 @@ public class PlayerController {
         }
 
     }
+
 
     @PostMapping("/add")
     public ResponseEntity<String> addPlayer(@Valid @RequestBody PlayerRegisterRequest playerData) {
