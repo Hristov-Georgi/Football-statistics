@@ -6,17 +6,21 @@ import com.sirmaacademy.finalexam.footballStatistics.exceptions.PlayerNotFoundEx
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.Player;
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.Team;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FieldPosition;
+import com.sirmaacademy.finalexam.footballStatistics.model.request.PlayerDeleteRequest;
 import com.sirmaacademy.finalexam.footballStatistics.model.request.PlayerRegisterRequest;
+import com.sirmaacademy.finalexam.footballStatistics.model.request.PlayerUpdateRequest;
 import com.sirmaacademy.finalexam.footballStatistics.model.response.PlayerDtoResponse;
 import com.sirmaacademy.finalexam.footballStatistics.model.response.TeamDtoResponse;
 import com.sirmaacademy.finalexam.footballStatistics.repository.PlayerRepository;
 import com.sirmaacademy.finalexam.footballStatistics.repository.TeamRepository;
 import com.sirmaacademy.finalexam.footballStatistics.service.PlayerService;
+import com.sirmaacademy.finalexam.footballStatistics.validation.ValidateCsvDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PlayerServiceLogic implements PlayerService {
@@ -77,6 +81,90 @@ public class PlayerServiceLogic implements PlayerService {
                 .save(new Player(playerRequest.getTeamNumber(), position, playerRequest.getFullName(), team));
     }
 
+    @Override
+    public Player updatePlayer(PlayerUpdateRequest playerData) {
+
+        if (playerData.getNewTeamNumber() == null || Objects.equals(playerData.getNewTeamNumber(), playerData.getTeamNumber())
+            && playerData.getNewPosition() == null || playerData.getNewPosition().equalsIgnoreCase(playerData.getPosition())
+            && playerData.getNewTeamName() == null || playerData.getNewTeamName().equalsIgnoreCase(playerData.getTeamName())) {
+
+            throw new NullPointerException("Invalid update data.");
+        }
+
+        Player player = validatePlayerForUpdate(playerData);
+
+        if (playerData.getNewPosition() != null) {
+            FieldPosition position = extractFieldPosition(playerData.getNewPosition());
+            player.setFieldPosition(position);
+        }
+
+        if (playerData.getNewTeamName() != null) {
+            Team team = extractTeam(playerData.getNewTeamName());
+            player.setTeam(team);
+        }
+
+        if (playerData.getNewTeamNumber() != null && player.getTeamNumber() != playerData.getNewTeamNumber()) {
+            int teamNumber = ValidateCsvDto.validateTeamNumber(playerData.getNewTeamNumber());
+            player.setTeamNumber(teamNumber);
+        }
+        return this.playerRepository.save(player);
+
+    }
+
+    @Override
+    public void deletePlayer(PlayerDeleteRequest playerData) {
+        Player player = validatePlayerForDelete(playerData);
+
+        this.playerRepository.delete(player);
+    }
+
+    private Player validatePlayerForDelete(PlayerDeleteRequest playerData) {
+        List<Player> players = this.playerRepository.findByFullNameContainingIgnoreCase(playerData.getFullName())
+                .orElseThrow(() -> new PlayerNotFoundException("Player: '" + playerData.getFullName() + "' not  found."));
+
+        Player forDelete = null;
+
+        FieldPosition oldPosition = extractFieldPosition(playerData.getPosition());
+        Team oldTeam  = extractTeam(playerData.getTeamName());
+
+        for (Player p : players) {
+
+            if (p.getFieldPosition().equals(oldPosition)
+                    && p.getTeam().equals(oldTeam)
+                    && p.getTeamNumber() == playerData.getTeamNumber()
+                    && p.getFullName().equalsIgnoreCase(playerData.getFullName())) {
+
+                forDelete = p;
+            }
+            break;
+        }
+        return forDelete;
+
+    }
+
+    private Player validatePlayerForUpdate(PlayerUpdateRequest  playerData) {
+        List<Player> players = this.playerRepository.findByFullNameContainingIgnoreCase(playerData.getFullName())
+                .orElseThrow(() -> new PlayerNotFoundException("Player: '" + playerData.getFullName() + "' not  found."));
+
+        Player forUpdate = null;
+
+        FieldPosition oldPosition = extractFieldPosition(playerData.getPosition());
+        Team oldTeam  = extractTeam(playerData.getTeamName());
+
+        for (Player p : players) {
+
+            if (p.getFieldPosition().equals(oldPosition)
+                    && p.getTeam().equals(oldTeam)
+                    && p.getTeamNumber() == playerData.getTeamNumber()
+                    && p.getFullName().equalsIgnoreCase(playerData.getFullName())) {
+
+                forUpdate = p;
+            }
+            break;
+        }
+        return forUpdate;
+
+    }
 
     private FieldPosition extractFieldPosition(String position) {
 
