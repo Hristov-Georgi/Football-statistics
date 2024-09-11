@@ -2,22 +2,16 @@ package com.sirmaacademy.finalexam.footballStatistics.model.response;
 
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FieldPosition;
 
-public class PlayerDtoResponse {
+public class PlayerStatisticDtoResponse {
 
     private int teamNumber;
     private FieldPosition fieldPosition;
     private String fullName;
-    private TeamDtoResponse teamDtoResponse;
 
-    public PlayerDtoResponse() {
-    }
-
-    public PlayerDtoResponse(int teamNumber, FieldPosition fieldPosition, String fullName,
-                             TeamDtoResponse teamDtoResponse) {
+    public PlayerStatisticDtoResponse(int teamNumber, FieldPosition fieldPosition, String fullName) {
         this.teamNumber = teamNumber;
         this.fieldPosition = fieldPosition;
         this.fullName = fullName;
-        this.teamDtoResponse = teamDtoResponse;
     }
 
     public int getTeamNumber() {
@@ -43,13 +37,4 @@ public class PlayerDtoResponse {
     public void setFullName(String fullName) {
         this.fullName = fullName;
     }
-
-    public TeamDtoResponse getTeamDtoResponse() {
-        return teamDtoResponse;
-    }
-
-    public void setTeamDtoResponse(TeamDtoResponse teamDtoResponse) {
-        this.teamDtoResponse = teamDtoResponse;
-    }
-
 }
