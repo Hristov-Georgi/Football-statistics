@@ -25,9 +25,6 @@ public class Team {
 
     /**
      * Use when import/receive data from frontend client.
-     * @param name
-     * @param managerFullName
-     * @param footballGroup
      */
     public Team(String name, String managerFullName, FootballGroup footballGroup) {
         this.name = name;
@@ -37,10 +34,6 @@ public class Team {
 
     /**
      * Use when import data from csv file.
-     * @param id
-     * @param name
-     * @param managerFullName
-     * @param footballGroup
      */
     public Team(long id, String name, String managerFullName, FootballGroup footballGroup) {
         this.id = id;

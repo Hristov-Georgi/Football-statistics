@@ -106,4 +106,5 @@ public class PlayerUpdateRequest {
     public void setNewTeamName(String newTeamName) {
         this.newTeamName = newTeamName;
     }
+
 }

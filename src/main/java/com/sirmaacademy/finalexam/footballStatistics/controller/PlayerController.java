@@ -38,11 +38,11 @@ public class PlayerController {
 
     @PostMapping("/add")
     public ResponseEntity<String> addPlayer(@Valid @RequestBody PlayerRegisterRequest playerData) {
-            this.playerService.addNewPlayer(playerData);
+        this.playerService.addNewPlayer(playerData);
 
-            return ResponseEntity.ok("Player '"
-                    + playerData.getFullName()
-                    + "' added successfully");
+        return ResponseEntity.ok("Player '"
+                + playerData.getFullName()
+                + "' added successfully");
     }
 
     @PutMapping("/update")

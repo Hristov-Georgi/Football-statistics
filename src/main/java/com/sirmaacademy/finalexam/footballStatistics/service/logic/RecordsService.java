@@ -24,4 +24,5 @@ public class RecordsService {
     public int getTotalMatchDuration(Long matchId) {
         return this.recordsRepository.findTotalMatchDuration(matchId);
     }
+
 }

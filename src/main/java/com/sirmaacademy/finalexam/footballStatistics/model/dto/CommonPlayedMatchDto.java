@@ -37,4 +37,5 @@ public class CommonPlayedMatchDto {
     public void setMatchTotalDuration(Integer matchTotalDuration) {
         this.matchTotalDuration = matchTotalDuration;
     }
+
 }

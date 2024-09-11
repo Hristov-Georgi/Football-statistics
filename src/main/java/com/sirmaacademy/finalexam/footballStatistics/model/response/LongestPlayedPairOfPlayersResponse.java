@@ -6,22 +6,22 @@ import java.util.List;
 
 public class LongestPlayedPairOfPlayersResponse {
 
-    private List<PlayerDtoResponse> playersDtoResponse;
+    private List<PlayerStatisticDtoResponse> playersDtoResponse;
     private Integer totalTimePlayedTogether;
     private List<CommonPlayedMatchDto> commonPlayedMatches;
 
-    public LongestPlayedPairOfPlayersResponse(List<PlayerDtoResponse> playersDtoResponse, Integer totalTimePlayedTogether,
+    public LongestPlayedPairOfPlayersResponse(List<PlayerStatisticDtoResponse> playersDtoResponse, Integer totalTimePlayedTogether,
                                               List<CommonPlayedMatchDto> commonPlayedMatches) {
         this.playersDtoResponse = playersDtoResponse;
         this.totalTimePlayedTogether = totalTimePlayedTogether;
         this.commonPlayedMatches = commonPlayedMatches;
     }
 
-    public List<PlayerDtoResponse> getPlayersDtoResponse() {
+    public List<PlayerStatisticDtoResponse> getPlayersDtoResponse() {
         return playersDtoResponse;
     }
 
-    public void setPlayersDtoResponse(List<PlayerDtoResponse> playersDtoResponse) {
+    public void setPlayersDtoResponse(List<PlayerStatisticDtoResponse> playersDtoResponse) {
         this.playersDtoResponse = playersDtoResponse;
     }
 
@@ -40,4 +40,5 @@ public class LongestPlayedPairOfPlayersResponse {
     public void setCommonPlayedMatches(List<CommonPlayedMatchDto> commonPlayedMatches) {
         this.commonPlayedMatches = commonPlayedMatches;
     }
+
 }

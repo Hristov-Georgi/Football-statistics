@@ -89,16 +89,8 @@ public class LongestPlayedPairOfPlayersService {
             }
 
         }
-        //TODO: remove
-//        Map<String, List<CommonPlayedMatchDto>> commonMap = commonMatchPlayed
-//                .entrySet()
-//                .stream()
-//                .sorted(Comparator.comparingInt(v -> v.getValue().size()))
-//                .filter(v -> v.getValue().size() > 5)
-//                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue,
-//                        (e1, e2) -> e1, LinkedHashMap::new));
 
-        pairTotalPlayedTimeMap = sortPairTotalPlayedMap(pairTotalPlayedTimeMap);
+        pairTotalPlayedTimeMap = sortMapByValueInteger(pairTotalPlayedTimeMap);
 
         return getListOfLongestPlayedPlayers(pairTotalPlayedTimeMap, commonMatchPlayed);
     }
@@ -154,16 +146,16 @@ public class LongestPlayedPairOfPlayersService {
         return new TeamDtoResponse(team.getName(), team.getManagerFullName(), team.getFootballGroup());
     }
 
-    private List<PlayerDtoResponse> extractPlayersResponseFromMapKey(String mapKeyIds) {
+    private List<PlayerStatisticDtoResponse> extractPlayersResponseFromMapKey(String mapKeyIds) {
         Long firstPlayerId = Long.parseLong(mapKeyIds.split("\\|")[0]);
         Long secondPlayerId = Long.parseLong(mapKeyIds.split("\\|")[1]);
 
         Player firstPlayer = this.playerService.getById(firstPlayerId);
         Player secondPlayer = this.playerService.getById(secondPlayerId);
 
-        PlayerDtoResponse firstPlayerResponse = new PlayerDtoResponse(
+        PlayerStatisticDtoResponse firstPlayerResponse = new PlayerStatisticDtoResponse(
                 firstPlayer.getTeamNumber(), firstPlayer.getFieldPosition(), firstPlayer.getFullName());
-        PlayerDtoResponse secondPlayerResponse = new PlayerDtoResponse(
+        PlayerStatisticDtoResponse secondPlayerResponse = new PlayerStatisticDtoResponse(
                 secondPlayer.getTeamNumber(), secondPlayer.getFieldPosition(), secondPlayer.getFullName());
 
         return List.of(firstPlayerResponse, secondPlayerResponse);
@@ -182,21 +174,7 @@ public class LongestPlayedPairOfPlayersService {
         throw new RuntimeException("Record with id '" + id + "' was not found.");
     }
 
-//    //TODO: remove
-//    private String extractMapKey(Map<String, Integer> map) {
-//        String name = null;
-//        for (Map.Entry<String, Integer> m : map.entrySet()){
-//            name = m.getKey();
-//        }
-//
-//        if (name == null) {
-//            throw new NullPointerException("Map Key is null");
-//        }
-//        return name;
-//    }
-
-    //TODO: set better name :)
-    private Map<String, Integer> sortPairTotalPlayedMap(Map<String, Integer> playersMap) {
+    private Map<String, Integer> sortMapByValueInteger(Map<String, Integer> playersMap) {
         return playersMap
                 .entrySet()
                 .stream()
@@ -222,7 +200,7 @@ public class LongestPlayedPairOfPlayersService {
                 return longestPlayList;
             }
 
-            List<PlayerDtoResponse> playersDto = extractPlayersResponseFromMapKey(spp.getKey());
+            List<PlayerStatisticDtoResponse> playersDto = extractPlayersResponseFromMapKey(spp.getKey());
             Integer totalPlayedTimeTogether = spp.getValue();
             List<CommonPlayedMatchDto> matchesList = extractListOfCommonPlayedMatchesById(
                     spp.getKey(), commonPlayedMatches);

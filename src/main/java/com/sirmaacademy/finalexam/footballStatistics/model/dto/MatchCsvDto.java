@@ -58,4 +58,5 @@ public class MatchCsvDto {
     public void setScore(String score) {
         this.score = score;
     }
+
 }

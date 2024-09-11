@@ -113,19 +113,6 @@ public abstract class ValidateCsvDto {
             throw new InvalidLengthException("Name can't be more than 100 symbols long");
         }
 
-//        for (char s : name.toCharArray()) {
-//
-//            if ( 122 < s
-//                    || (90 < s && s < 97)
-//                    || (57 < s && s < 65)
-//                    || (s < 48 && 45 < s)
-//                    || (s < 45 && 41 < s)
-//                    || (s < 40 && 32 < s)
-//                    || s < 32) {
-//                throw new InvalidSymbolException("Invalid symbol: '" + s + "' in football team's name.");
-//            }
-//
-//        }
         return name;
     }
 

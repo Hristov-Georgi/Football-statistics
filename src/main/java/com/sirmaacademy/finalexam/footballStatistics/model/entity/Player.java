@@ -33,7 +33,6 @@ public class Player {
      * Use when import/receive data from frontend client.
      * @param teamNumber - player number in the team
      * @param fieldPosition - player position on the field - enum value.
-     * @param fullName
      * @param team - Team object required.
      */
     public Player(int teamNumber, FieldPosition fieldPosition, String fullName, Team team) {
@@ -45,11 +44,6 @@ public class Player {
 
     /**
      * Use when import data from csv file.
-     * @param id
-     * @param teamNumber
-     * @param fieldPosition
-     * @param fullName
-     * @param teamId
      */
     public Player(Long id, int teamNumber, FieldPosition fieldPosition, String fullName, Long teamId) {
         this.id = id;

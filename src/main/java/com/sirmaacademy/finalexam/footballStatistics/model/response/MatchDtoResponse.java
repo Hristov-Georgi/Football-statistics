@@ -28,4 +28,5 @@ public class MatchDtoResponse {
     public void setScoreDtoResponseList(List<ScoreDtoResponse> scoreDtoResponseList) {
         this.scoreDtoResponseList = scoreDtoResponseList;
     }
+
 }

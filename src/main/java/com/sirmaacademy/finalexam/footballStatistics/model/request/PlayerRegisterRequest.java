@@ -64,4 +64,5 @@ public class PlayerRegisterRequest {
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
+
 }

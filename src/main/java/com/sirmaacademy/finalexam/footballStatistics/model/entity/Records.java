@@ -33,10 +33,6 @@ public class Records {
 
     /**
      * Use when import/receive data from frontend client.
-     * @param player
-     * @param match
-     * @param fromMinutes
-     * @param toMinutes
      */
     public Records(Player player, Match match, Integer fromMinutes, Integer toMinutes) {
         this.player = player;
@@ -47,11 +43,6 @@ public class Records {
 
     /**
      * Use when import data from csv file.
-     * @param id
-     * @param playerIdFromCsvFile
-     * @param matchIdFromCsvFile
-     * @param fromMinutes
-     * @param toMinutes
      */
     public Records(long id, Long playerIdFromCsvFile, Long matchIdFromCsvFile, Integer fromMinutes, Integer toMinutes) {
         this.id = id;

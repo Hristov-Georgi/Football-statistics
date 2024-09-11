@@ -15,6 +15,4 @@ public interface PlayerRepository extends JpaRepository<Player, Long> {
     Optional<List<Player>> findByFullNameContainingIgnoreCase(String name);
     boolean existsByFullNameIgnoreCase(String name);
 
-
-
 }

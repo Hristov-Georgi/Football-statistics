@@ -1,8 +1,7 @@
 package com.sirmaacademy.finalexam.footballStatistics.utils;
 
-import com.sirmaacademy.finalexam.footballStatistics.model.response.LongestPlayedPairOfPlayers;
-import com.sirmaacademy.finalexam.footballStatistics.service.CsvToDatabaseService;
-import com.sirmaacademy.finalexam.footballStatistics.service.LongestPlayedPairOfPlayersService;
+import com.sirmaacademy.finalexam.footballStatistics.service.logic.CsvToDatabaseService;
+import com.sirmaacademy.finalexam.footballStatistics.service.logic.LongestPlayedPairOfPlayersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -38,14 +37,6 @@ public class DatabaseInitializer implements CommandLineRunner {
 //        this.csvToDatabaseService.persistRecordsToDatabase();
 
 
-        //for testing //TODO: delete at the end
-
-        LongestPlayedPairOfPlayers players = this.longestPlayedPairOfPlayersService
-                .findLongestPlayedPlayerPairInCommonMatches();
-
-        System.out.println(players.getPlayers().toString());
-        System.out.println(players.getCommonPlayedMatches().toString());
-        System.out.println(players.getTotalTimePlayedTogether());
     }
 
 }

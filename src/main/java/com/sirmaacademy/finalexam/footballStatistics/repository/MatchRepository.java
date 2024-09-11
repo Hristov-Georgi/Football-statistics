@@ -13,5 +13,4 @@ public interface MatchRepository extends JpaRepository<Match, Long> {
     @Query("SELECT m.id FROM Match m")
     List<Long> findAllIds();
 
-
 }
