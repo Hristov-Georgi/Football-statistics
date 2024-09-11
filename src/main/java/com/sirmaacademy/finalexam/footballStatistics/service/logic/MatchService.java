@@ -1,4 +1,4 @@
-package com.sirmaacademy.finalexam.footballStatistics.service;
+package com.sirmaacademy.finalexam.footballStatistics.service.logic;
 
 import com.sirmaacademy.finalexam.footballStatistics.repository.MatchRepository;
 import org.springframework.beans.factory.annotation.Autowired;

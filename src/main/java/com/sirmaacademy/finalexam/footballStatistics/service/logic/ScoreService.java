@@ -1,4 +1,4 @@
-package com.sirmaacademy.finalexam.footballStatistics.service;
+package com.sirmaacademy.finalexam.footballStatistics.service.logic;
 
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.Score;
 import com.sirmaacademy.finalexam.footballStatistics.repository.ScoreRepository;

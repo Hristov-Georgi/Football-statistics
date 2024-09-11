@@ -1,8 +1,9 @@
-package com.sirmaacademy.finalexam.footballStatistics.service;
+package com.sirmaacademy.finalexam.footballStatistics.service.logic;
 
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.CommonPlayedMatchDto;
 import com.sirmaacademy.finalexam.footballStatistics.model.entity.*;
 import com.sirmaacademy.finalexam.footballStatistics.model.response.*;
+import com.sirmaacademy.finalexam.footballStatistics.service.PlayerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +18,8 @@ public class LongestPlayedPairOfPlayersService {
     private final PlayerService playerService;
 
     @Autowired
-    public LongestPlayedPairOfPlayersService(RecordsService recordsService, MatchService matchService, PlayerService playerService) {
+    public LongestPlayedPairOfPlayersService(RecordsService recordsService, MatchService matchService,
+                                             PlayerService playerService) {
         this.recordsService = recordsService;
         this.matchService = matchService;
         this.playerService = playerService;

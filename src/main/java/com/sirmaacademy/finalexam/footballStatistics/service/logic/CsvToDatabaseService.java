@@ -1,4 +1,4 @@
-package com.sirmaacademy.finalexam.footballStatistics.service;
+package com.sirmaacademy.finalexam.footballStatistics.service.logic;
 
 import com.sirmaacademy.finalexam.footballStatistics.exceptions.*;
 import com.sirmaacademy.finalexam.footballStatistics.model.dto.MatchCsvDto;
@@ -9,6 +9,7 @@ import com.sirmaacademy.finalexam.footballStatistics.model.entity.*;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FieldPosition;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FootballGroup;
 import com.sirmaacademy.finalexam.footballStatistics.repository.CsvToDatabaseRepository;
+import com.sirmaacademy.finalexam.footballStatistics.service.PlayerService;
 import com.sirmaacademy.finalexam.footballStatistics.utils.DateFormatter;
 import com.sirmaacademy.finalexam.footballStatistics.utils.ReadCSV;
 import com.sirmaacademy.finalexam.footballStatistics.validation.ValidateCsvDto;
@@ -37,7 +38,9 @@ public class CsvToDatabaseService {
     private final MatchService matchService;
 
     @Autowired
-    public CsvToDatabaseService(ReadCSV readCSV, CsvToDatabaseRepository csvToDatabaseRepository, TeamService teamService, ScoreService scoreService, PlayerService playerService, MatchService matchService) {
+    public CsvToDatabaseService(ReadCSV readCSV, CsvToDatabaseRepository csvToDatabaseRepository,
+                                TeamService teamService, ScoreService scoreService,
+                                PlayerService playerService, MatchService matchService) {
         this.readCSV = readCSV;
         this.csvToDatabaseRepository = csvToDatabaseRepository;
         this.teamService = teamService;
