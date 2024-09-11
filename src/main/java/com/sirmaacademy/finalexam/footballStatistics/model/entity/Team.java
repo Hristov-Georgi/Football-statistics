@@ -3,9 +3,6 @@ package com.sirmaacademy.finalexam.footballStatistics.model.entity;
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FootballGroup;
 import jakarta.persistence.*;
 
-import java.util.List;
-
-
 @Entity
 @Table(name = "teams")
 public class Team {

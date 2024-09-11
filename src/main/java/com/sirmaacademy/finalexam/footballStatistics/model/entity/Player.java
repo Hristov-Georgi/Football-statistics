@@ -20,7 +20,7 @@ public class Player {
     @Column(nullable = false)
     private String fullName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
 
     @Transient

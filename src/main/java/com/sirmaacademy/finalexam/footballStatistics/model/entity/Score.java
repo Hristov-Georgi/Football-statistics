@@ -16,7 +16,7 @@ public class Score {
     @Column(nullable = false, updatable = false)
     private String scoredGoals;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Match match;
 
     public Score() {
