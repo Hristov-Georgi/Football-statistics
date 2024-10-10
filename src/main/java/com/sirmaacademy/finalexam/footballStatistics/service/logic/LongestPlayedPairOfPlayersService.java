@@ -43,56 +43,38 @@ public class LongestPlayedPairOfPlayersService {
          */
         Map<Long, List<Records>> recordsByMatchIdMap = getRecordsGroupedByMatchId();
 
+
         for (Map.Entry<Long, List<Records>> m : recordsByMatchIdMap.entrySet()) {
+            Integer matchDuration = getTotalMatchDuration(m.getKey());
+            List<Records> recordsList = m.getValue();
 
-            Integer matchDuration = null;
-            Records firstRecord = null;
+            for (int current = 0; current < m.getValue().size() - 1; current++) {
+                Records currentRecord = recordsList.get(current);
 
-            for (Records nextRecord : m.getValue()) {
+                for (int next = current + 1; next < m.getValue().size(); next++) {
 
-                if (firstRecord == null) {
-                    firstRecord = nextRecord;
-                    matchDuration = getTotalMatchDuration(nextRecord.getMatch().getId());
-                    continue;
+                    Records nextRecord = recordsList.get(next);
+
+                    String playersPairNames = concatPlayerIds(currentRecord.getPlayer().getId(), nextRecord.getPlayer().getId());
+
+                    int timePlayedTogether = timePlayedTogetherInCurrentMatch(currentRecord, nextRecord);
+
+                    pairTotalPlayedTimeMap.putIfAbsent(playersPairNames, 0);
+                    pairTotalPlayedTimeMap.put(playersPairNames,
+                            pairTotalPlayedTimeMap.get(playersPairNames) + timePlayedTogether);
+
+                    MatchDtoResponse matchDtoResponse = mapMatchToMatchDtoResponse(currentRecord.getMatch());
+
+                    CommonPlayedMatchDto currentMatch =
+                            new CommonPlayedMatchDto(matchDtoResponse, timePlayedTogether, matchDuration);
+
+                    commonMatchPlayed.putIfAbsent(playersPairNames, new ArrayList<>());
+                    commonMatchPlayed.get(playersPairNames).add(currentMatch);
                 }
 
-                if (firstRecord == nextRecord) {
-                    break;
-                }
-
-                boolean isTrue = false;
-                for (Records eachRecord : m.getValue()) {
-
-                    if (firstRecord == eachRecord) {
-                        isTrue = true;
-                        continue;
-                    }
-
-                    if (isTrue) {                                                                //eachRecord
-                        String playersPairNames = concatPlayerIds(firstRecord.getPlayer().getId(), eachRecord.getPlayer().getId());
-
-                        int timePlayedTogether = timePlayedTogetherInCurrentMatch(firstRecord, eachRecord); //eachRecord
-
-                        pairTotalPlayedTimeMap.putIfAbsent(playersPairNames, 0);
-                        pairTotalPlayedTimeMap.put(playersPairNames,
-                                pairTotalPlayedTimeMap.get(playersPairNames) + timePlayedTogether);
-
-                        MatchDtoResponse matchDtoResponse = mapMatchToMatchDtoResponse(firstRecord.getMatch());
-
-                        CommonPlayedMatchDto currentMatch =
-                                new CommonPlayedMatchDto(matchDtoResponse, timePlayedTogether, matchDuration);
-
-                        commonMatchPlayed.putIfAbsent(playersPairNames, new ArrayList<>());
-                        commonMatchPlayed.get(playersPairNames).add(currentMatch);
-                    }
-
-                }
-                isTrue = false;
-                firstRecord = nextRecord;
             }
 
         }
-
         pairTotalPlayedTimeMap = sortMapByValueInteger(pairTotalPlayedTimeMap);
 
         return getListOfLongestPlayedPlayers(pairTotalPlayedTimeMap, commonMatchPlayed);
@@ -194,7 +176,7 @@ public class LongestPlayedPairOfPlayersService {
      * Extract List<CommonPlayedMatchDto> for specific pair of players.
      */
     private List<CommonPlayedMatchDto> extractListOfCommonPlayedMatchesById(String id,
-                                        Map<String, List<CommonPlayedMatchDto>> commonPlayedMatches) {
+                                                                            Map<String, List<CommonPlayedMatchDto>> commonPlayedMatches) {
 
         for (Map.Entry<String, List<CommonPlayedMatchDto>> m : commonPlayedMatches.entrySet()) {
 
