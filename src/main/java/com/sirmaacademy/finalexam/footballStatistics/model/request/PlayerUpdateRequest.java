@@ -13,7 +13,7 @@ public class PlayerUpdateRequest {
     private String fullName;
 
     @NotNull
-   @Range(max = 99)
+    @Range(max = 99)
     private Integer teamNumber;
 
     @NotBlank
@@ -24,16 +24,10 @@ public class PlayerUpdateRequest {
     @Length(min = 4, max = 100)
     private String teamName;
 
-    @NotNull
-    @Range(max = 99)
     private Integer newTeamNumber;
 
-    @NotBlank
-    @Length(min = 2)
     private String newPosition;
 
-    @NotBlank
-    @Length(min = 4, max = 100)
     private String newTeamName;
 
     public PlayerUpdateRequest() {
