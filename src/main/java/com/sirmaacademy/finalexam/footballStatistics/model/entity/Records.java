@@ -22,6 +22,9 @@ public class Records {
     @Column(nullable = false)
     private Integer toMinutes;
 
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE;
+
     @Transient
     private Long playerIdFromCsvFile;
 
@@ -108,4 +111,11 @@ public class Records {
         this.matchIdFromCsvFile = matchIdFromCsvFile;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

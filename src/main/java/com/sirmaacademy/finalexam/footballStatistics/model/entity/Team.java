@@ -2,9 +2,16 @@ package com.sirmaacademy.finalexam.footballStatistics.model.entity;
 
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FootballGroup;
 import jakarta.persistence.*;
+import org.hibernate.annotations.Filter;
+import org.hibernate.annotations.FilterDef;
+import org.hibernate.annotations.ParamDef;
+import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Table(name = "teams")
+@SQLDelete(sql = "UPDATE teams SET deleted = true WHERE id=?")
+@FilterDef(name = "deletedTeamFilter", parameters = @ParamDef(name = "isDeleted", type = Boolean.class))
+@Filter(name = "deletedTeamFilter", condition = "deleted = :isDeleted")
 public class Team {
 
     @Id
@@ -19,6 +26,9 @@ public class Team {
 
     @Enumerated(EnumType.STRING)
     private FootballGroup footballGroup;
+
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE;
 
     public Team() {
     }
@@ -72,6 +82,14 @@ public class Team {
 
     public void setFootballGroup(FootballGroup footballGroup) {
         this.footballGroup = footballGroup;
+    }
+
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
 }

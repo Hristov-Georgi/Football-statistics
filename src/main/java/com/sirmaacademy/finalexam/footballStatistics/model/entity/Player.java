@@ -2,6 +2,7 @@ package com.sirmaacademy.finalexam.footballStatistics.model.entity;
 
 import com.sirmaacademy.finalexam.footballStatistics.model.enums.FieldPosition;
 import jakarta.persistence.*;
+import org.hibernate.annotations.SQLUpdate;
 
 @Entity
 @Table(name = "players")
@@ -22,6 +23,9 @@ public class Player {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Team team;
+
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE;
 
     @Transient
     private Long teamId;
@@ -101,4 +105,11 @@ public class Player {
         this.teamId = teamId;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }

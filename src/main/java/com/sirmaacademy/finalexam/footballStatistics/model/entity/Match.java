@@ -1,6 +1,8 @@
 package com.sirmaacademy.finalexam.footballStatistics.model.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.DialectOverride;
+import org.hibernate.annotations.SQLDelete;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
@@ -16,10 +18,13 @@ public class Match {
     private Long id;
 
     @DateTimeFormat
-    private LocalDate localDate; //TODO: universal format
+    private LocalDate localDate;
 
     @OneToMany(targetEntity = Score.class, mappedBy = "match")
     private List<Score> scores = new ArrayList<>();
+
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE;
 
     public Match() {
     }
@@ -68,5 +73,12 @@ public class Match {
         this.scores = scores;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }
 

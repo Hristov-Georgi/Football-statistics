@@ -19,6 +19,9 @@ public class Score {
     @ManyToOne(fetch = FetchType.LAZY)
     private Match match;
 
+    @Column(nullable = false)
+    private boolean deleted = Boolean.FALSE;
+
     public Score() {
     }
 
@@ -65,4 +68,11 @@ public class Score {
         this.match = match;
     }
 
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
+    }
 }
